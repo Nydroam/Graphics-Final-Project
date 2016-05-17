@@ -50,8 +50,8 @@ jdyrlandweaver
 ====================*/
 void draw_polygons( struct matrix *polygons, screen s, color c ) {
   
-  int i;  
-  double xB, yB, xM, yM, xT, yT;
+  int i,x,y;  
+  double xB, yB, xM, yM, xT, yT, d0, d1, d2;
 
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
