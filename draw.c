@@ -133,7 +133,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	  d1 = (xM-xB)/(yM-yB);
 	  xR = xB + d1*(y-yB);
 	}
-	else{
+	else if(y > (int)yB){
 	  d2 = (xT-xM)/(yT-yM);
 	  xR = xB + d2*(y-yB);
 	}
