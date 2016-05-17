@@ -51,9 +51,62 @@ jdyrlandweaver
 void draw_polygons( struct matrix *polygons, screen s, color c ) {
   
   int i;  
+  double xB, yB, xM, yM, xT, yT;
+
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
     if ( calculate_dot( polygons, i ) < 0 ) {
+
+      if (polygons->m[1][i] >= polygons->m[1][i+1] && polygons->m[1][i] >= polygons->m[1][i+2]) {
+        xT = polygons->m[0][i];
+        yT = polygons->m[1][i];
+        if (polygons->m[1][i+1] >= polygons->m[1][i+2]) {
+          xM = polygons->m[0][i+1];
+          yM = polygons->m[1][i+1];
+          xB = polygons->m[0][i+2];
+          yB = polygons->m[1][i+2];
+        }
+        else {
+          xB = polygons->m[0][i+1];
+          yB = polygons->m[1][i+1];
+          xM = polygons->m[0][i+2];
+          yM = polygons->m[1][i+2];
+        }
+      }
+
+      else if (polygons->m[1][i+1] >= polygons->m[1][i] && polygons->m[1][i+1] >= polygons->m[1][i+2]) {
+        xT = polygons->m[0][i+1];
+        yT = polygons->m[1][i+1];
+        if (polygons->m[1][i] >= polygons->m[1][i+2]) {
+          xM = polygons->m[0][i];
+          yM = polygons->m[1][i];
+          xB = polygons->m[0][i+2];
+          yB = polygons->m[1][i+2];
+        }
+        else {
+          xB = polygons->m[0][i];
+          yB = polygons->m[1][i];
+          xM = polygons->m[0][i+2];
+          yM = polygons->m[1][i+2];
+        }
+      }
+      else {
+        xT = polygons->m[0][i+2];
+        yT = polygons->m[1][i+2];
+        if (polygons->m[1][i] >= polygons->m[1][i+1]) {
+          xM = polygons->m[0][i];
+          yM = polygons->m[1][i];
+          xB = polygons->m[0][i+1];
+          yB = polygons->m[1][i+1];
+        }
+        else {
+          xB = polygons->m[0][i];
+          yB = polygons->m[1][i];
+          xM = polygons->m[0][i+1];
+          yM = polygons->m[1][i+1];
+        }
+      }
+
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
 		 polygons->m[0][i+1],
