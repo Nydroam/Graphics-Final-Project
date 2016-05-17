@@ -56,7 +56,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
     if ( calculate_dot( polygons, i ) < 0 ) {
-
+      //determines top mid bot
       if (polygons->m[1][i] >= polygons->m[1][i+1] && polygons->m[1][i] >= polygons->m[1][i+2]) {
         xT = polygons->m[0][i];
         yT = polygons->m[1][i];
@@ -73,7 +73,6 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
           yM = polygons->m[1][i+2];
         }
       }
-
       else if (polygons->m[1][i+1] >= polygons->m[1][i] && polygons->m[1][i+1] >= polygons->m[1][i+2]) {
         xT = polygons->m[0][i+1];
         yT = polygons->m[1][i+1];
@@ -106,7 +105,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
           yM = polygons->m[1][i+1];
         }
       }
-
+      //3 outlines
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
 		 polygons->m[0][i+1],
@@ -122,6 +121,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][i],
 		 polygons->m[1][i],
 		 s, c);
+      //fill in
     }
   }
 }
