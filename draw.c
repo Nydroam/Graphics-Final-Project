@@ -52,7 +52,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   
   int i,x,y;  
   double xB, yB, xM, yM, xT, yT, d0, d1, d2;
-
+  double xL,xR;
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
     if ( calculate_dot( polygons, i ) < 0 ) {
@@ -122,6 +122,24 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[1][i],
 		 s, c);
       //fill in
+      xL,xR = xB;
+      y = yB;
+      //printf("%f, %f, %f, %f, %f, %f\n",xB,yB,xM,yM,xT,yT);
+      while(y<(int)yT){
+	//printf("%f, %f, %d\n",xL,xR,y);
+	d0 = (xT-xB)/(yT-yB);
+	xL = xB + d0*(y-yB);
+	if (y < (int)yM){
+	  d1 = (xM-xB)/(yM-yB);
+	  xR = xB + d1*(y-yB);
+	}
+	else{
+	  d2 = (xT-xM)/(yT-yM);
+	  xR = xB + d2*(y-yB);
+	}
+	draw_line(xL,y,xR,y,s,c);
+	y++;
+      }
     }
   }
 }

@@ -225,7 +225,7 @@ while (vn) {
 set_value(lookup_symbol(vn->name), vn->value);
 vn = vn->next;
 }
-print_knobs();
+//print_knobs();
 }
 for (i=0;i<lastop;i++) {
 switch (op[i].opcode) {
