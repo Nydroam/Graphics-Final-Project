@@ -133,10 +133,11 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	  d1 = (xM-xB)/(yM-yB);
 	  xR = xB + d1*(y-yB);
 	}
-	else if(y > (int)yB){
+	else {
 	  d2 = (xT-xM)/(yT-yM);
-	  xR = xB + d2*(y-yB);
+	  xR = xM + d2*(y-yM);
 	}
+  c.green = (i * 50 + 50) % 255;
 	draw_line(xL,y,xR,y,s,c);
 	y++;
       }
