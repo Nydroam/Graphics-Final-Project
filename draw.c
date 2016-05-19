@@ -125,21 +125,13 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
       xL,xR = xB;
       y = yB;
       //printf("%f, %f, %f, %f, %f, %f\n",xB,yB,xM,yM,xT,yT);
-      while(y<=(int)yT){
-	if(y==(int)yT)
-	  xL = xT;
-	else if(y==(int)yB)
-	  xL = xB;
-	else{
+      while(y<(int)yT){
 	  d0 = (xT-xB)/(yT-yB);
 	  xL = xB + d0*(y-yB);
-	}
        
 	if (y >= (int) yM){
 	  if(y==(int)yM)
 	    xR = xM;
-	  else if(y==(int)yT)
-	    xR = xT;
 	  else{
 	    d2 = (xT-xM)/(yT-yM);
 	    xR = xM + d2*(y-yM);
