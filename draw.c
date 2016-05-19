@@ -136,12 +136,13 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	}
        
 	if (y >= (int) yM){
-	  if(y!=(int)yM){
+	  if(y==(int)yM)
+	    xR = xM;
+	  else if(y==(int)yT)
+	    xR = xT;
+	  else{
 	    d2 = (xT-xM)/(yT-yM);
 	    xR = xM + d2*(y-yM);
-	  }
-	  else{
-	    xR = xM;
 	  }
 //printf("here1\n");
 	  //printf("%f, %f, %f\n",yT,yM, d2);
