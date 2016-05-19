@@ -133,6 +133,9 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	    d2 = (xT-xM)/(yT-yM);
 	    xR = xM + d2*(y-yM);
 	  }
+	  else{
+	    xR = xM;
+	  }
 //printf("here1\n");
 	  //printf("%f, %f, %f\n",yT,yM, d2);
 	}
@@ -141,11 +144,14 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	    d1 = (xM-xB)/(yM-yB);
 	    xR = xB + d1*(y-yB);
 	  }
+	  else{
+	    xR = xB;
+	  }
 	  //printf("here2\n");
 	}
 	//printf("%f, %f, %d\n",xL,xR,y);
 	c.green = (i * 50 + 50) % 255; //makes each surface visible
-	  draw_line(xL,y,xR,y,s,c);
+	draw_line(xL,y,xR,y,s,c);
 	y+=1;
       }
     }
