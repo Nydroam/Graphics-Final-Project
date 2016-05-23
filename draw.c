@@ -105,6 +105,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
           yM = polygons->m[1][i+1];
         }
       }
+      c.green = (i * 50 + 50) % 255; //makes each surface visible
       //3 outlines
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
