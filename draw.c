@@ -732,7 +732,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   //printf("draw_line\n");
   //positive slope: Octants 1, 2 (5 and 6)
   if ( dy == 0 && dx == 0 ){
-    plot(s,c,x,y,z,zbuf);
+    //plot(s,c,x,y,z,zbuf);
   }
   else if ( dy > 0 ) {
 
