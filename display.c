@@ -12,6 +12,7 @@ for red, green and blue respectively
 
 #include "ml6.h"
 #include "display.h"
+#include "matrix.h"
 
 color change_color( int i ) {
   
@@ -75,9 +76,9 @@ pixel 0, 0 located at the lower left corner of the screen
 02/12/10 09:09:00
 jdyrlandweaver
 ====================*/
-void plot( screen s, color c, int x, int y) {
+void plot( screen s, color c, int x, int y, int z, struct matrix *zbuf) {
   int newy = YRES - 1 - y;
-  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES )
+  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z > zbuf->m[x][newy])
     s[x][newy] = c;
 }
 
