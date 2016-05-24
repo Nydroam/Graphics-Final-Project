@@ -149,7 +149,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
       xL,xR = xB;
       zL,zR = zB;
       y = yB;
-      printf("draw_polygons\n");
+      //      printf("draw_polygons\n");
       while(y<(int)yT){
 	if(y==(int)yB){
 	  xL = xB;
@@ -709,11 +709,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   x = x0;
   y = y0;
   z = z0;
-  printf("%d %d %d %d\n", x0, x1, y0, y1);
+  //printf("%d %d %d %d\n", x0, x1, y0, y1);
   //dist = sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) + (z1-z0)*(z1-z0) );
   //swap points so we're always drawing left to right
   if ( x0 > x1 ) {
-    printf("flippy\n");
+    //printf("flippy\n");
     x = x1;
     y = y1;
     z = z1;
@@ -728,8 +728,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   //need to know dx and dy for this version
   dx = (x1 - x) * 2;
   dy = (y1 - y) * 2;
-  printf("%d, %d, %d, %d, %d, %d, %d, %d\n",x,x0, x1,y, y0, y1, dx, dy);
-  printf("draw_line\n");
+  //printf("%d, %d, %d, %d, %d, %d, %d, %d\n",x,x0, x1,y, y0, y1, dx, dy);
+  //printf("draw_line\n");
   //positive slope: Octants 1, 2 (5 and 6)
   if ( dy == 0 && dx == 0 ){
     plot(s,c,x,y,z,zbuf);
