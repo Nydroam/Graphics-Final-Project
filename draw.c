@@ -149,7 +149,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
       xL,xR = xB;
       zL,zR = zB;
       y = yB;
-      //      printf("draw_polygons\n");
+      //printf("draw_polygons\n");
       while(y<(int)yT){
 	if(y==(int)yB){
 	  xL = xB;
@@ -160,6 +160,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
 	  xL = xB + d0*(y-yB);
 	  d0 = (zT-zB)/(yT-yB);
 	  zL = zB + d0*(y-yB);
+	  //printf("1%f %f\n",zL,zT);
 	}
 	if (y >= (int) yM){
 	  if(y==(int)yM){
@@ -171,23 +172,25 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
 	    xR = xM + d2*(y-yM);
 	    d2 = (zT-zM)/(yT-yM);
 	    zR = zM + d2*(y-yM);
+	    //printf("2%f %f\n",zR,zT);
 	  }
 	}
 	else{
-	  if(y!=(int)yB){
+	  if(y==(int)yB){
+	    xR = xB;
+	    zR = zB;
+	  }
+	  else{
 	    d1 = (xM-xB)/(yM-yB);
 	    xR = xB + d1*(y-yB);
 	    d1 = (zM-zB)/(yM-yB);
 	    zR = zB + d1*(y-yB);
-	  }
-	  else{
-	    xR = xB;
-	    zR = zB;
+	    //printf("3%f %f\n",xR,xM);
 	  }
 	}
 	draw_line(xL,y,zL,xR,y,zR,s,c,zbuf);
 	y+=1;
-      }
+	}
     }
   }
 }
@@ -732,7 +735,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   //printf("draw_line\n");
   //positive slope: Octants 1, 2 (5 and 6)
   if ( dy == 0 && dx == 0 ){
-    //plot(s,c,x,y,z,zbuf);
+    plot(s,c,x,y,z,zbuf);
   }
   else if ( dy > 0 ) {
 
@@ -742,7 +745,6 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   
       while ( x <= x1 ) {
 	plot(s, c, x, y, z, zbuf);
-	//z = z0 + (x-x0)/(x1-x0)*(z1-z0);
 	if ( d < 0 ) {
 	  x = x + 1;
 	  d = d + dy;
@@ -753,7 +755,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  d = d + dy - dx;
 	}
 	
-	z = z0 + (x-x0)/(x1-x0)*(z1-z0);
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	//printf("1%f %f\n",z,z1);
       }
     }
 
@@ -762,7 +765,6 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
       d = ( dy / 2 ) - dx;
       while ( y <= y1 ) {
 	plot(s, c, x, y, z, zbuf);
-	//z = z0 + (y-y0)/(y1-y0)*(z1-z0);
 	if ( d > 0 ) {
 	  y = y + 1;
 	  d = d - dx;
@@ -772,7 +774,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  x = x + 1;
 	  d = d + dy - dx;
 	}
-	z = z0 + (y-y0)/(y1-y0)*(z1-z0);
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	//printf("2%f %f\n",z,z1);
       }
     }
   }
@@ -788,7 +791,6 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
       while ( x <= x1 ) {
 
 	plot(s, c, x, y, z, zbuf);
-	//z = z0 + (x-x0)/(x1-x0)*(z1-z0);
 	if ( d > 0 ) {
 	  x = x + 1;
 	  d = d + dy;
@@ -798,7 +800,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  y = y - 1;
 	  d = d + dy + dx;
 	}
-	z = z0 + (x-x0)/(x1-x0)*(z1-z0);
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	//printf("3%f %f\n",z,z1);
       }
     }
 
@@ -810,7 +813,6 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
       while ( y >= y1 ) {
 	
 	plot(s, c, x, y, z, zbuf);
-	//z = z0 + (x-x0)/(x1-x0)*(z1-z0);
 	if ( d < 0 ) {
 	  y = y - 1;
 	  d = d + dx;
@@ -820,7 +822,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  x = x + 1;
 	  d = d + dy + dx;
 	}
-	z = z0 + (y-y0)/(y1-y0)*(z1-z0);
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	//printf("4%f %f\n",z,z1);
       }
     }
   }
