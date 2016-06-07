@@ -55,8 +55,8 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
   double xL,xR;
   double zB, zM, zT;
   double zL,zR;
+  double dot;
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
-
     if ( calculate_dot( polygons, i ) < 0 ) {
       //determines top mid bot
       if (polygons->m[1][i] >= polygons->m[1][i+1] && polygons->m[1][i] >= polygons->m[1][i+2]) {
@@ -123,6 +123,32 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
         }
       }
       c.green = (i * 50 + 50) % 255; //makes each surface visible
+      //SHADING HERE-------------------------------------------------
+      /*
+      struct constants rcolor;
+      rcolor.r[LAMBIENT] = 1;
+      rcolor.g[LAMBIENT] = 1;
+      rcolor.b[LAMBIENT] = 1;
+      
+      rcolor.r[LDIFFUSE] = 0;
+      rcolor.g[LDIFFUSE] = 0;
+      rcolor.b[LDIFFUSE] = 0;
+
+      rcolor.r[LSPECULAR] = 0;
+      rcolor.g[LSPECULAR] = 0;
+      rcolor.b[LSPECULAR] = 0;
+
+      color ambient;
+      ambient.red = 255;
+      ambient.green = 255;
+      ambient.blue = 255;
+      
+      ambient.red *= rcolor.r[LAMBIENT];
+      ambient.green *= rcolor.g[LAMBIENT];
+      ambient.blue *= rcolor.b[LAMBIENT];
+
+      */
+      //SHADING END---------------------------------------------------
       //3 outlines
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
