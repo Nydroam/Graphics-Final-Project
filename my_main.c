@@ -260,14 +260,6 @@
   				case LIGHT:
           point = lookup_symbol(op[i].op.light.p->name)->s.l;
           print_light(point);
-  				// point->l[0] = 100;
-  				// point->l[1] = 400;
-  				// point->l[2] = 50;
-  				// point->l[3] = 0;
-  				// point->c[0] = 255;
-  				// point->c[1] = 0;
-  				// point->c[2] = 255;
-  				// point->c[3] = 0;
           break;
   				case SPHERE:
   					add_sphere( tmp,op[i].op.sphere.d[0], //cx
