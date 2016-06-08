@@ -248,18 +248,9 @@
   			for (i=0;i<lastop;i++) {
   				switch (op[i].opcode) {
   				case CONSTANTS:
-  				//ambient
-  				rcolor->r[LAMBIENT] = op[i].op.constants.r[0];
-  				rcolor->g[LAMBIENT] = op[i].op.constants.r[1];
-  				rcolor->b[LAMBIENT] = op[i].op.constants.r[2];
-  				//diffuse
-  				rcolor->r[LDIFFUSE] = op[i].op.constants.g[0];
-  				rcolor->g[LDIFFUSE] = op[i].op.constants.g[1];
-  				rcolor->b[LDIFFUSE] = op[i].op.constants.g[2];
-  				//specular
-  				rcolor->r[LSPECULAR] = op[i].op.constants.b[0];
-  				rcolor->g[LSPECULAR] = op[i].op.constants.b[1];
-  				rcolor->b[LSPECULAR] = op[i].op.constants.b[2];
+          //temp_symtab = lookup_symbol(op[i].op.constants.p->name);
+          rcolor = lookup_symbol(op[i].op.constants.p->name)->s.c;
+          print_constants(rcolor);
   				break;
   				case AMBIENT:
   				ambient.red = op[i].op.ambient.c[0];
@@ -267,14 +258,17 @@
   				ambient.blue = op[i].op.ambient.c[2];
   				break;
   				case LIGHT:
-  				point->l[0] = 100;
-  				point->l[1] = 400;
-  				point->l[2] = 50;
-  				point->l[3] = 0;
-  				point->c[0] = 255;
-  				point->c[1] = 0;
-  				point->c[2] = 255;
-  				point->c[3] = 0;
+          point = lookup_symbol(op[i].op.light.p->name)->s.l;
+          print_light(point);
+  				// point->l[0] = 100;
+  				// point->l[1] = 400;
+  				// point->l[2] = 50;
+  				// point->l[3] = 0;
+  				// point->c[0] = 255;
+  				// point->c[1] = 0;
+  				// point->c[2] = 255;
+  				// point->c[3] = 0;
+          break;
   				case SPHERE:
   					add_sphere( tmp,op[i].op.sphere.d[0], //cx
 					op[i].op.sphere.d[1], //cy
