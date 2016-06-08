@@ -7,6 +7,7 @@
 #include "draw.h"
 #include "matrix.h"
 #include "gmath.h"
+#include "symtab.h"
 
 /*======== void add_polygon() ==========
 Inputs:   struct matrix *surfaces
@@ -35,6 +36,26 @@ void add_polygon( struct matrix *polygons,
   add_point(polygons, x1, y1, z1);
   add_point(polygons, x2, y2, z2);
 }
+  
+
+  /*
+      struct constants rcolor;
+      rcolor.r[LAMBIENT] = 1;
+      rcolor.g[LAMBIENT] = 1;
+      rcolor.b[LAMBIENT] = 1;
+      
+      rcolor.r[LDIFFUSE] = 0;
+      rcolor.g[LDIFFUSE] = 0;
+      rcolor.b[LDIFFUSE] = 0;
+
+      rcolor.r[LSPECULAR] = 0;
+      rcolor.g[LSPECULAR] = 0;
+      rcolor.b[LSPECULAR] = 0;
+            color ambient;
+      ambient.red = 255;
+      ambient.green = 255;
+      ambient.blue = 255;
+      */
 
 /*======== void draw_polygons() ==========
 Inputs:   struct matrix *polygons
@@ -48,7 +69,7 @@ triangles
 04/16/13 13:13:27
 jdyrlandweaver
 ====================*/
-void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *zbuf ) {
+void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light *point) {
   
   int i,x,y;  
   double xB, yB, xM, yM, xT, yT, d0, d1, d2;
@@ -124,30 +145,12 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
       }
       c.green = (i * 50 + 50) % 255; //makes each surface visible
       //SHADING HERE-------------------------------------------------
-      /*
-      struct constants rcolor;
-      rcolor.r[LAMBIENT] = 1;
-      rcolor.g[LAMBIENT] = 1;
-      rcolor.b[LAMBIENT] = 1;
+
+
+
+
+
       
-      rcolor.r[LDIFFUSE] = 0;
-      rcolor.g[LDIFFUSE] = 0;
-      rcolor.b[LDIFFUSE] = 0;
-
-      rcolor.r[LSPECULAR] = 0;
-      rcolor.g[LSPECULAR] = 0;
-      rcolor.b[LSPECULAR] = 0;
-
-      color ambient;
-      ambient.red = 255;
-      ambient.green = 255;
-      ambient.blue = 255;
-      
-      ambient.red *= rcolor.r[LAMBIENT];
-      ambient.green *= rcolor.g[LAMBIENT];
-      ambient.blue *= rcolor.b[LAMBIENT];
-
-      */
       //SHADING END---------------------------------------------------
       //3 outlines
       draw_line( polygons->m[0][i],
