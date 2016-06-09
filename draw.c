@@ -94,11 +94,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
 		ay = polygons->m[1][i+1] - polygons->m[1][i];
 		az = polygons->m[2][i+1] - polygons->m[2][i];
-
 		bx = polygons->m[0][i+2] - polygons->m[0][i];
 		by = polygons->m[1][i+2] - polygons->m[1][i];
 		bz = polygons->m[2][i+2] - polygons->m[2][i];
-
 		normal = calculate_normal( ax, ay, az, bx, by, bz );
 
 		if ( calculate_dot( normal, view ) < 0 ) {
@@ -174,12 +172,10 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			Ia.blue = ambient.blue * rcolor->r[2];
 
 			//light vector
-			// light_v[0] = point->l[0] - (xB + xM + xT) / 3.0;
-			// light_v[1] = point->l[1] - (yB + yM + yT) / 3.0;
-			// light_v[2] = point->l[2] - (zB + zM + zT) / 3.0;
 			light_v[0] = (xB + xM + xT) / 3.0 - point->l[0];
 			light_v[1] = (yB + yM + yT) / 3.0 - point->l[1];
 			light_v[2] = (zB + zM + zT) / 3.0 - point->l[2];
+
 			//normalize
 			normalize(light_v);
 			normalize(normal);
@@ -197,7 +193,6 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
 			Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
-
 			//add all I
 			c.red = Ia.red + Id.red + Is.red;
 			c.red = c.red>255?255:c.red;
@@ -208,9 +203,6 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			c.green = Ia.green + Id.green + Is.green;
 			c.green = c.green>255?255:c.green;
 			c.green = c.green<0?0:c.green;
-
-
-
 			//SHADING END---------------------------------------------------
 			//3 outlines
 			draw_line( polygons->m[0][i],
