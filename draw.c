@@ -102,6 +102,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		by = polygons->m[1][i+2] - polygons->m[1][i];
 		bz = polygons->m[2][i+2] - polygons->m[2][i];
 		normal = calculate_normal( ax, ay, az, bx, by, bz );
+
+		//goes through vertices to see if the vertices of this polygon are in the vertices matrix, if they are, add their normals, else add to vertex matrix
 		for( j = 0; j < vertices -> lastcol; j++){
 			if(nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
 			   nearly_equal(polygons->m[1][i],vertices->m[1][j])&&
@@ -141,6 +143,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			}
 		}
 	}
+	//for efficiency, stores I values so that we don't have to calculate again
 	struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
 	SETTING VERTEX NORMALS END========================================================================*/
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
@@ -219,7 +222,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				}
 			}
 			/*GOURAUD SHADING HERE=====================================================================
-			//calculating I for each vertex of this polygon
+			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			for( j = 0; j < vertices->lastcol; j++){
 
 				if(nearly_equals(vertices->[0][j], xT)&&nearly_equals(vertices->[1][j],yT)&&nearly_equals(vertices[2][j],zT)){
@@ -335,6 +338,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			cL.blue,cR.blue = cB.blue;
 			cL.green,cR.green = cB.green;
 			y = yB;
+			//interpolation of colors between the vertices
 			while(y<(int)yT){
 			 if(y==(int)yB){
 				 xL = xB;
