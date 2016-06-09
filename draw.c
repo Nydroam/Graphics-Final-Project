@@ -76,6 +76,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
   double xL,xR;
   double zB, zM, zT;
   double zL,zR;
+  color Ia, Id, Is;
   double dot;
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
     if ( calculate_dot( polygons, i ) < 0 ) {
@@ -143,14 +144,27 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	  zM = polygons->m[2][i+1];
         }
       }
-      c.green = (i * 50 + 50) % 255; //makes each surface visible
+      //c.green = (i * 50 + 50) % 255; //makes each surface visible
       //SHADING HERE-------------------------------------------------
+      Ia.red = ambient.red * rcolor->r[0];
+      Ia.green = ambient.green * rcolor->r[1];
+      Ia.blue = ambient.blue * rcolor->r[2];
 
 
 
 
+      c.red = Ia.red;
+      c.red = c.red>255?255:c.red;
+      c.red = c.red<0?0:c.red;
+      c.blue = Ia.blue;
+      c.blue = c.blue>255?255:c.blue;
+      c.blue = c.blue<0?0:c.blue;      
+      c.green = Ia.green;
+      c.green = c.green>255?255:c.green;
+      c.green = c.green<0?0:c.green;
 
-      
+
+
       //SHADING END---------------------------------------------------
       //3 outlines
       draw_line( polygons->m[0][i],
