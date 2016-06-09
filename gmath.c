@@ -46,6 +46,7 @@ double * calculate_normal( double ax, double ay, double az,
   04/17/12 16:38:34
   jonalf
   ====================*/
+  /*
 double calculate_dot( struct matrix *points, int i ) {
 
   double ax, ay, az, bx, by, bz;
@@ -75,4 +76,17 @@ double calculate_dot( struct matrix *points, int i ) {
 
   free(normal);  
   return dot;
+}*/
+
+double calculate_dot(double * v1, double * v2) {
+  double dot;
+  dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+  return dot;
+}
+
+void * normalize(double * v) {
+  double length = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  v[0] = v[0] / length;
+  v[1] = v[1] / length;
+  v[2] = v[2] / length;
 }
