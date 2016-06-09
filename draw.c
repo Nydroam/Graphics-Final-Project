@@ -77,6 +77,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double * normal;
 	double * view;
 	double * light_v;
+	double * reflect;
 	double xL,xR;
 	double zB, zM, zT;
 	double zL,zR;
@@ -84,6 +85,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double dot;
 	view = (double *)malloc(3 * sizeof(double));
 	light_v = (double *)malloc(3 * sizeof(double));
+	reflect = (double *)malloc(3 * sizeof(double));
 	view[0] = 0;
 	view[1] = 0;
 	view[2] = -1;
@@ -172,27 +174,38 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			Ia.blue = ambient.blue * rcolor->r[2];
 
 			//light vector
-			light_v[0] = point->l[0] - (xB + xM + xT) / 3.0;
-			light_v[1] = point->l[1] - (yB + yM + yT) / 3.0;
-			light_v[2] = point->l[2] - (zB + zM + zT) / 3.0;
-
+			// light_v[0] = point->l[0] - (xB + xM + xT) / 3.0;
+			// light_v[1] = point->l[1] - (yB + yM + yT) / 3.0;
+			// light_v[2] = point->l[2] - (zB + zM + zT) / 3.0;
+			light_v[0] = (xB + xM + xT) / 3.0 - point->l[0];
+			light_v[1] = (yB + yM + yT) / 3.0 - point->l[1];
+			light_v[2] = (zB + zM + zT) / 3.0 - point->l[2];
 			//normalize
 			normalize(light_v);
 			normalize(normal);
 
 			//diffuse
-			Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal);
-			Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal);
-			Id. blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal);
+			Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+			Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+			Id. blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+
+			//specular
+			reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
+			reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
+			reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
+			Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+			Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+			Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
 
-			c.red = Ia.red + Id.red;
+			//add all I
+			c.red = Ia.red + Id.red + Is.red;
 			c.red = c.red>255?255:c.red;
 			c.red = c.red<0?0:c.red;
-			c.blue = Ia.blue + Id.blue;
+			c.blue = Ia.blue + Id.blue + Is.blue;
 			c.blue = c.blue>255?255:c.blue;
 			c.blue = c.blue<0?0:c.blue;      
-			c.green = Ia.green + Id.green;
+			c.green = Ia.green + Id.green + Is.green;
 			c.green = c.green>255?255:c.green;
 			c.green = c.green<0?0:c.green;
 

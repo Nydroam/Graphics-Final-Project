@@ -250,7 +250,7 @@
   				case CONSTANTS:
           //temp_symtab = lookup_symbol(op[i].op.constants.p->name);
           rcolor = lookup_symbol(op[i].op.constants.p->name)->s.c;
-          print_constants(rcolor);
+          // print_constants(rcolor);
   				break;
   				case AMBIENT:
   				ambient.red = op[i].op.ambient.c[0];
@@ -259,7 +259,7 @@
   				break;
   				case LIGHT:
           point = lookup_symbol(op[i].op.light.p->name)->s.l;
-          print_light(point);
+          // print_light(point);
           break;
   				case SPHERE:
   					add_sphere( tmp,op[i].op.sphere.d[0], //cx
