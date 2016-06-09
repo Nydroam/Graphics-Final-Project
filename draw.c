@@ -71,7 +71,7 @@ jdyrlandweaver
 ====================*/
 void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light *point) {
 	
-	int i,x,y;  
+	int i,j,x,y;  
 	double xB, yB, xM, yM, xT, yT, d0, d1, d2;
 	double ax, ay, az, bx, by, bz;
 	double * normal;
@@ -82,13 +82,67 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double zB, zM, zT;
 	double zL,zR;
 	color Ia, Id, Is;
-	double dot;
+	color cB, cM, cT;
+	color cL, cR;
 	view = (double *)malloc(3 * sizeof(double));
 	light_v = (double *)malloc(3 * sizeof(double));
 	reflect = (double *)malloc(3 * sizeof(double));
 	view[0] = 0;
 	view[1] = 0;
 	view[2] = -1;
+	/*SETTING VERTEX NORMALS================================================================================
+	struct matrix* vertices = new_matrix(4,1000);
+	struct matrix* v_normals = new_matrix(4,1000);
+	for( i=0; i < polygons->lastcol-2; i+=3){
+		//get the surface normal
+		ax = polygons->m[0][i+1] - polygons->m[0][i];
+		ay = polygons->m[1][i+1] - polygons->m[1][i];
+		az = polygons->m[2][i+1] - polygons->m[2][i];
+		bx = polygons->m[0][i+2] - polygons->m[0][i];
+		by = polygons->m[1][i+2] - polygons->m[1][i];
+		bz = polygons->m[2][i+2] - polygons->m[2][i];
+		normal = calculate_normal( ax, ay, az, bx, by, bz );
+		for( j = 0; j < vertices -> lastcol; j++){
+			if(nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
+			   nearly_equal(polygons->m[1][i],vertices->m[1][j])&&
+			   nearly_equal(polygons->m[2][i],vertices->m[2][j])){
+			   	v_normals[0][j]+=normal[0];
+			   	v_normals[1][j]+=normal[1];
+			   	v_normals[2][j]+=normal[2];
+			}
+			else{
+				add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
+				add_point(v_normals, 0, 0, 0);
+				add_point(i_vals, 0, 0, 0);
+			}
+			if(nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
+			   nearly_equal(polygons->m[1][i+1],vertices->m[1][j])&&
+			   nearly_equal(polygons->m[2][i+1],vertices->m[2][j])){
+			   	v_normals[0][j]+=normal[0];
+			   	v_normals[1][j]+=normal[1];
+			   	v_normals[2][j]+=normal[2];
+			}
+			else{
+				add_point(vertices,polygons->m[0][i+1],polygons->m[1][i+1],polygons->m[2][i+1]);
+				add_point(v_normals, 0, 0, 0);
+				add_point(i_vals, 0, 0, 0);
+			}
+			if(nearly_equal(polygons->m[0][i+2],vertices->m[0][j])&&
+			   nearly_equal(polygons->m[1][i+2],vertices->m[1][j])&&
+			   nearly_equal(polygons->m[2][i+2],vertices->m[2][j])){
+			   	v_normals[0][j]+=normal[0];
+			   	v_normals[1][j]+=normal[1];
+			   	v_normals[2][j]+=normal[2];
+			}
+			else{
+				add_point(vertices,polygons->m[0][i+2],polygons->m[1][i+2],polygons->m[2][i+2]);
+				add_point(v_normals, 0, 0, 0);
+				add_point(i_vals, 0, 0, 0);
+			}
+		}
+	}
+	struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
+	SETTING VERTEX NORMALS END========================================================================*/
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -164,7 +218,192 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					zM = polygons->m[2][i+1];
 				}
 			}
-			//c.green = (i * 50 + 50) % 255; //makes each surface visible
+			/*GOURAUD SHADING HERE=====================================================================
+			//calculating I for each vertex of this polygon
+			for( j = 0; j < vertices->lastcol; j++){
+
+				if(nearly_equals(vertices->[0][j], xT)&&nearly_equals(vertices->[1][j],yT)&&nearly_equals(vertices[2][j],zT)){
+					Ia.red = ambient.red * rcolor->r[0];
+					Ia.green = ambient.green * rcolor->r[1];
+					Ia.blue = ambient.blue * rcolor->r[2];
+					normal[0]=v_normals[0][j];
+					normal[1]=v_normals[1][j];
+					normal[2]=v_normals[2][j];
+					normalize(normal);
+					light_v[0] = xT - point->l[0];
+					light_v[1] = yT - point->l[1];
+					light_v[2] = zT - point->l[2];
+					normalize(light_v);
+					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+
+					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
+					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
+					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
+					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+
+					cT.red = Ia.red + Id.red + Is.red;
+					cT.red = cT.red>255?255:cT.red;
+					cT.red = cT.red<0?0:cT.red;
+					cT.blue = Ia.blue + Id.blue + Is.blue;
+					cT.blue = cT.blue>255?255:cT.blue;
+					cT.blue = cT.blue<0?0:cT.blue;      
+					cT.green = Ia.green + Id.green + Is.green;
+					cT.green = cT.green>255?255:cT.green;
+					cT.green = cT.green<0?0:cT.green;
+				}
+				if(nearly_equals(vertices->[0][j], xM)&&nearly_equals(vertices->[1][j],yM)&&nearly_equals(vertices[2][j],zM)){
+					Ia.red = ambient.red * rcolor->r[0];
+					Ia.green = ambient.green * rcolor->r[1];
+					Ia.blue = ambient.blue * rcolor->r[2];
+					normal[0]=v_normals[0][j];
+					normal[1]=v_normals[1][j];
+					normal[2]=v_normals[2][j];
+					normalize(normal);
+					light_v[0] = xM - point->l[0];
+					light_v[1] = yM - point->l[1];
+					light_v[2] = zM - point->l[2];
+					normalize(light_v);
+					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+
+					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
+					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
+					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
+					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+
+					cM.red = Ia.red + Id.red + Is.red;
+					cM.red = cM.red>255?255:cM.red;
+					cM.red = cM.red<0?0:cM.red;
+					cM.blue = Ia.blue + Id.blue + Is.blue;
+					cM.blue = cM.blue>255?255:cM.blue;
+					cM.blue = cM.blue<0?0:cM.blue;      
+					cM.green = Ia.green + Id.green + Is.green;
+					cM.green = cM.green>255?255:cM.green;
+					cM.green = cM.green<0?0:cM.green;
+				}
+				if(nearly_equals(vertices->[0][j], xB)&&nearly_equals(vertices->[1][j],yB)&&nearly_equals(vertices[2][j],zB)){
+					Ia.red = ambient.red * rcolor->r[0];
+					Ia.green = ambient.green * rcolor->r[1];
+					Ia.blue = ambient.blue * rcolor->r[2];
+					normal[0]=v_normals[0][j];
+					normal[1]=v_normals[1][j];
+					normal[2]=v_normals[2][j];
+					normalize(normal);
+					light_v[0] = xB - point->l[0];
+					light_v[1] = yB - point->l[1];
+					light_v[2] = zB - point->l[2];
+					normalize(light_v);
+					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+
+					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
+					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
+					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
+					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+
+					cB.red = Ia.red + Id.red + Is.red;
+					cB.red = cB.red>255?255:cB.red;
+					cB.red = cB.red<0?0:cB.red;
+					cB.blue = Ia.blue + Id.blue + Is.blue;
+					cB.blue = cB.blue>255?255:cB.blue;
+					cB.blue = cB.blue<0?0:cB.blue;      
+					cB.green = Ia.green + Id.green + Is.green;
+					cB.green = cB.green>255?255:cB.green;
+					cB.green = cB.green<0?0:cB.green;
+				}
+				
+			}
+
+			//3 outlines
+			draw_line( xT, yT, zT, xM, yM, zM, s, cbuf, zbuf, cT, cM);
+			draw_line( xM, yM, zM, xB, yB, zB, s, cbuf, zbuf, cM, cT);
+			draw_line( xB, yB, zB, xT, yT, zT, s, cbuf, zbuf, cB, cT);
+			//fill in
+			xL,xR = xB;
+			zL,zR = zB;
+			cL.red,cR.red = cB.red;
+			cL.blue,cR.blue = cB.blue;
+			cL.green,cR.green = cB.green;
+			y = yB;
+			while(y<(int)yT){
+			 if(y==(int)yB){
+				 xL = xB;
+				 zL = zB;
+				 cL.red = cB.red;
+				 cL.blue = cB.blue;
+				 cL.green = cB.green;
+			 }
+			 else{
+				 d0 = (xT-xB)/(yT-yB);
+				 xL = xB + d0*(y-yB);
+				 d0 = (zT-zB)/(yT-yB);
+				 zL = zB + d0*(y-yB);
+
+				 d0 = (cT.red-cB.red)/(yT-yB);
+				 cL.red = zB.red + d0*(y-yB);
+				 d0 = (cT.blue-cB.blue)/(yT-yB);
+				 cL.blue = zB.blue + d0*(y-yB);
+				 d0 = (cT.green-cB.green)/(yT-yB);
+				 cL.green = zB.green + d0*(y-yB);
+			 }
+			 if (y >= (int) yM){
+				 if(y==(int)yM){
+					 xR = xM;
+					 zR = zM;
+					 cR.red = cM.red;
+					 cR.blue = cM.blue;
+					 cR.green = cM.green;
+				 }
+				 else{
+					 d2 = (xT-xM)/(yT-yM);
+					 xR = xM + d2*(y-yM);
+					 d2 = (zT-zM)/(yT-yM);
+					 zR = zM + d2*(y-yM);
+					 d2 = (cT.red-cM.red)/(yT-yM);
+					 cR.red = cM.red + d2*(y-yM);
+					 d2 = (cT.blue-cM.blue)/(yT-yM);
+					 cR.blue = cM.blue + d2*(y-yM);
+					 d2 = (cT.green-cM.green)/(yT-yM);
+					 cR.green = cM.green + d2*(y-yM);
+				 }
+			 }
+			 else{
+				 if(y==(int)yB){
+					 xR = xB;
+					 zR = zB;
+					 cR.red = cB.red;
+					 cR.blue = cB.blue;
+					 cR.green = cB.green;
+				 }
+				 else{
+					 d1 = (xM-xB)/(yM-yB);
+					 xR = xB + d1*(y-yB);
+					 d1 = (zM-zB)/(yM-yB);
+					 zR = zB + d1*(y-yB);
+
+					 d1 = (cM.red-cB.red)/(yM-yB);
+					 cR.red = cB.red + d1*(y-yB);
+					 d1 = (cM.blue-cB.blue)/(yM-yB);
+					 cR.blue = cB.blue + d1*(y-yB);
+					 d1 = (cM.green-cB.green)/(yM-yB);
+					 cR.green = cB.green + d1*(y-yB);
+			//printf("3%f %f\n",xR,xM);
+				 }
+			 }
+			 draw_line(xL,y,zL,xR,y,zR,s,cbuf,zbuf,cL,cR);
+			 y+=1;
+		 	}
+			GOURAUD ATTEMPT END =====================================================================*/
 			//SHADING HERE-------------------------------------------------
 			//ambient
 			Ia.red = ambient.red * rcolor->r[0];
@@ -183,7 +422,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//diffuse
 			Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
 			Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
-			Id. blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+			Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
 
 			//specular
 			reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
