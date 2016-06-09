@@ -325,9 +325,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			}
 
 			//3 outlines
-			draw_line( xT, yT, zT, xM, yM, zM, s, cbuf, zbuf, cT, cM);
-			draw_line( xM, yM, zM, xB, yB, zB, s, cbuf, zbuf, cM, cT);
-			draw_line( xB, yB, zB, xT, yT, zT, s, cbuf, zbuf, cB, cT);
+			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
+			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cT);
+			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
 			//fill in
 			xL,xR = xB;
 			zL,zR = zB;
@@ -400,7 +400,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//printf("3%f %f\n",xR,xM);
 				 }
 			 }
-			 draw_line(xL,y,zL,xR,y,zR,s,cbuf,zbuf,cL,cR);
+			 draw_line(xL,y,zL,xR,y,zR,s,zbuf,cL,cR);
 			 y+=1;
 		 	}
 			GOURAUD ATTEMPT END =====================================================================*/
@@ -1027,26 +1027,30 @@ void draw_lines( struct matrix * points, screen s, color c, struct matrix * zbuf
 
 
 void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
- 
+//draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1)
 	int x, y, d, dx, dy;
 	double z, dz, dist;
+	//color c;
 	x = x0;
 	y = y0;
 	z = z0;
-	//printf("%d %d %d %d\n", x0, x1, y0, y1);
-	//dist = sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) + (z1-z0)*(z1-z0) );
+
+	//c = c0;
 	//swap points so we're always drawing left to right
 	if ( x0 > x1 ) {
 		//printf("flippy\n");
 		x = x1;
 		y = y1;
 		z = z1;
+		//c = c1;
 		x1 = x0;
 		y1 = y0;
 		z1 = z0;
+		//c1 = c0;
 		x0 = x;
 		y0 = y;
 		z0 = z;
+		//c0 = c;
 	}
 
 	//need to know dx and dy for this version
@@ -1077,7 +1081,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	}
 	
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
-	//printf("1%f %f\n",z,z1);
+	/*
+	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	*/
 			}
 		}
 
@@ -1096,7 +1104,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy - dx;
 	}
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	//printf("2%f %f\n",z,z1);
+	/*
+	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	*/
 			}
 		}
 	}
@@ -1122,6 +1134,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy + dx;
 	}
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	/*
+	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	*/
 	//printf("3%f %f\n",z,z1);
 			}
 		}
@@ -1144,7 +1161,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy + dx;
 	}
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	//printf("4%f %f\n",z,z1);
+	/*
+	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	*/
 			}
 		}
 	}
