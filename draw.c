@@ -95,29 +95,29 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	struct matrix* v_normals = new_matrix(4,1000);
 	printf("here\n");
 	for( i=0; i < polygons->lastcol-2; i+=3){
-	  if(i>=vertices->lastcol||(nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
-		   nearly_equal(polygons->m[1][i],vertices->m[1][j])&&
-				    nearly_equal(polygons->m[2][i],vertices->m[2][j]))){
+	  if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i],vertices->m[0][i])&&
+		   nearly_equal(polygons->m[1][i],vertices->m[1][i])&&
+				    nearly_equal(polygons->m[2][i],vertices->m[2][i]))){
 		}
 		else{
 			add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
 		}
-		if(i>=vertices->lastcol||(nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
-		   nearly_equal(polygons->m[1][i+1],vertices->m[1][j])&&
-		   nearly_equal(polygons->m[2][i+1],vertices->m[2][j]))){
+		if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i+1],vertices->m[0][i])&&
+		   nearly_equal(polygons->m[1][i+1],vertices->m[1][i])&&
+		   nearly_equal(polygons->m[2][i+1],vertices->m[2][i]))){
 		}
 		else{
 			add_point(vertices,polygons->m[0][i+1],polygons->m[1][i+1],polygons->m[2][i+1]);
 		}
-		if(i>=vertices->lastcol||(nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
-		   nearly_equal(polygons->m[1][i+1],vertices->m[1][j])&&
-					  nearly_equal(polygons->m[2][i+1],vertices->m[2][j]))){
+		if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i+1],vertices->m[0][i])&&
+		   nearly_equal(polygons->m[1][i+1],vertices->m[1][i])&&
+					  nearly_equal(polygons->m[2][i+1],vertices->m[2][i]))){
 		}
 		else{
 			add_point(vertices,polygons->m[0][i+2],polygons->m[1][i+2],polygons->m[2][i+2]);
 		}
 	}
-	//printf("here1\n");
+	printf("%d\n",vertices->lastcol);
 	for( i=0; i < polygons->lastcol-2; i+=3){
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -130,7 +130,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		//goes through vertices to see if the vertices of this polygon are in the vertices matrix, if they are, add their normals, else add to vertex matrix
 		for( j = 0; j < vertices -> lastcol; j++){
 			//printf("going\n");
-			if(nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
+			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
 			   nearly_equal(polygons->m[1][i],vertices->m[1][j])&&
 			   nearly_equal(polygons->m[2][i],vertices->m[2][j])){
 				//printf("works2\n");
@@ -143,7 +143,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				add_point(v_normals, 0, 0, 0);
 				//add_point(i_vals, 0, 0, 0);
 			}
-			if(nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
+			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
 			   nearly_equal(polygons->m[1][i+1],vertices->m[1][j])&&
 			   nearly_equal(polygons->m[2][i+1],vertices->m[2][j])){
 			   	v_normals->m[0][j]+=normal[0];
@@ -155,7 +155,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				add_point(v_normals, 0, 0, 0);
 				//add_point(i_vals, 0, 0, 0);
 			}
-			if(nearly_equal(polygons->m[0][i+2],vertices->m[0][j])&&
+			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i+2],vertices->m[0][j])&&
 			   nearly_equal(polygons->m[1][i+2],vertices->m[1][j])&&
 			   nearly_equal(polygons->m[2][i+2],vertices->m[2][j])){
 			   	v_normals->m[0][j]+=normal[0];
@@ -172,7 +172,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	//for efficiency, stores I values so that we don't have to calculate again
 	//struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
 	//SETTING VERTEX NORMALS END========================================================================*/
-	//printf("here2\n");
+	printf("here2\n");
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
