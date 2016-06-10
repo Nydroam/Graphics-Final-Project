@@ -291,16 +291,16 @@
 					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point );
 					tmp->lastcol = 0;
 				break;
-				case LINE:
+				/*case LINE:
 					add_edge( tmp, op[i].op.line.p0[0],
 					op[i].op.line.p0[1],
 					op[i].op.line.p0[1],
 					op[i].op.line.p1[0],
 					op[i].op.line.p1[1],
 					op[i].op.line.p1[1]);
-					draw_lines( tmp, t, g, zbuffer );
+					draw_lines( tmp, t, g, zbuffer, rcolor, ambient, point );
 					tmp->lastcol = 0;
-				break;
+				break;*/
 				case MOVE:
 	//get the factors
 				xval = op[i].op.move.d[0];

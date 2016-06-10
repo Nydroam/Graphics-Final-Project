@@ -21,9 +21,9 @@ a pixel as a color triple
 */
 struct point_t {
 
-  int red;
-  int green;
-  int blue;
+  double red;
+  double green;
+  double blue;
 } point_t;
 
 /*

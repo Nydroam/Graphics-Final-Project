@@ -9,7 +9,7 @@
 #define LDIFFUSE 1
 #define LSPECULAR 2
 
-void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf);
+void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1);
 void add_point( struct matrix * points, 
 		 double x, double y, double z);
 void add_edge( struct matrix * points, 
