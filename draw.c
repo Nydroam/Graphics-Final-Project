@@ -70,7 +70,7 @@ triangles
 jdyrlandweaver
 ====================*/
 void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light *point) {
-	
+  printf("DRAWING\n");
 	int i,j,x,y;  
 	double xB, yB, xM, yM, xT, yT, d0, d1, d2;
 	double ax, ay, az, bx, by, bz;
@@ -93,29 +93,19 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	//SETTING VERTEX NORMALS================================================================================
 	struct matrix* vertices = new_matrix(4,1000);
 	struct matrix* v_normals = new_matrix(4,1000);
-	printf("here\n");
-	for( i=0; i < polygons->lastcol-2; i+=3){
-	  if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i],vertices->m[0][i])&&
-		   nearly_equal(polygons->m[1][i],vertices->m[1][i])&&
-				    nearly_equal(polygons->m[2][i],vertices->m[2][i]))){
-		}
-		else{
-			add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
-		}
-		if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i+1],vertices->m[0][i])&&
-		   nearly_equal(polygons->m[1][i+1],vertices->m[1][i])&&
-		   nearly_equal(polygons->m[2][i+1],vertices->m[2][i]))){
-		}
-		else{
-			add_point(vertices,polygons->m[0][i+1],polygons->m[1][i+1],polygons->m[2][i+1]);
-		}
-		if(i<vertices->lastcol&&(nearly_equal(polygons->m[0][i+1],vertices->m[0][i])&&
-		   nearly_equal(polygons->m[1][i+1],vertices->m[1][i])&&
-					  nearly_equal(polygons->m[2][i+1],vertices->m[2][i]))){
-		}
-		else{
-			add_point(vertices,polygons->m[0][i+2],polygons->m[1][i+2],polygons->m[2][i+2]);
-		}
+	printf("HERE\n");
+	for( i=0; i < polygons->lastcol; i++ ){
+	  int should_add = 1;
+	  for( j=0; j < vertices->lastcol; j++ ){
+	    if(nearly_equal(polygons->m[0][i],vertices->m[0][j])
+	       && nearly_equal(polygons->m[1][i],vertices->m[1][j])
+	       && nearly_equal(polygons->m[2][i],vertices->m[2][j]))
+	      should_add = 0;
+	  }
+	  if(should_add){
+	    add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
+	    add_point(v_normals, 0, 0, 0);
+	  }
 	}
 	printf("%d\n",vertices->lastcol);
 	for( i=0; i < polygons->lastcol-2; i+=3){
@@ -129,50 +119,40 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		normal = calculate_normal( ax, ay, az, bx, by, bz );
 		//goes through vertices to see if the vertices of this polygon are in the vertices matrix, if they are, add their normals, else add to vertex matrix
 		for( j = 0; j < vertices -> lastcol; j++){
-			//printf("going\n");
-			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i],vertices->m[0][j])&&
-			   nearly_equal(polygons->m[1][i],vertices->m[1][j])&&
-			   nearly_equal(polygons->m[2][i],vertices->m[2][j])){
-				//printf("works2\n");
-			   	v_normals->m[0][j]+=normal[0];
-			   	v_normals->m[1][j]+=normal[1];
-			   	v_normals->m[2][j]+=normal[2];
-			}
-			else{
-				//add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
-				add_point(v_normals, 0, 0, 0);
-				//add_point(i_vals, 0, 0, 0);
-			}
-			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i+1],vertices->m[0][j])&&
-			   nearly_equal(polygons->m[1][i+1],vertices->m[1][j])&&
-			   nearly_equal(polygons->m[2][i+1],vertices->m[2][j])){
-			   	v_normals->m[0][j]+=normal[0];
-			   	v_normals->m[1][j]+=normal[1];
-			   	v_normals->m[2][j]+=normal[2];
-			}
-			else{
-				//add_point(vertices,polygons->m[0][i+1],polygons->m[1][i+1],polygons->m[2][i+1]);
-				add_point(v_normals, 0, 0, 0);
-				//add_point(i_vals, 0, 0, 0);
-			}
-			if(j<v_normals->lastcol&&nearly_equal(polygons->m[0][i+2],vertices->m[0][j])&&
-			   nearly_equal(polygons->m[1][i+2],vertices->m[1][j])&&
-			   nearly_equal(polygons->m[2][i+2],vertices->m[2][j])){
-			   	v_normals->m[0][j]+=normal[0];
-			   	v_normals->m[1][j]+=normal[1];
-			   	v_normals->m[2][j]+=normal[2];
-			}
-			else{
-				//add_point(vertices,polygons->m[0][i+2],polygons->m[1][i+2],polygons->m[2][i+2]);
-				add_point(v_normals, 0, 0, 0);
-				//add_point(i_vals, 0, 0, 0);
-			}
+		  int add1, add2, add3 = 1;
+		  if(nearly_equal(polygons->m[0][i],vertices->m[0][j])
+		     &&nearly_equal(polygons->m[1][i],vertices->m[1][j])
+		     &&nearly_equal(polygons->m[2][i],vertices->m[2][j]))
+		    add1 = 0;
+		  if(nearly_equal(polygons->m[0][i+1],vertices->m[0][j])
+		     &&nearly_equal(polygons->m[1][i+1],vertices->m[1][j])
+		     &&nearly_equal(polygons->m[2][i+1],vertices->m[2][j]))
+		    add2 = 0;
+		  if(nearly_equal(polygons->m[0][i+2],vertices->m[0][j])
+		     &&nearly_equal(polygons->m[1][i+2],vertices->m[1][j])
+		     &&nearly_equal(polygons->m[2][i+2],vertices->m[2][j]))
+		    add3 = 0;
+		  if(add1){
+		    v_normals->m[0][i]+=normal[0];
+		    v_normals->m[1][i]+=normal[1];
+		    v_normals->m[2][i]+=normal[2];
+		  }
+		  if(add2){
+		    v_normals->m[0][i+1]+=normal[0];
+		    v_normals->m[1][i+1]+=normal[1];
+		    v_normals->m[2][i+1]+=normal[2];
+		  }
+		  if(add3){
+		    v_normals->m[0][i+2]+=normal[0];
+		    v_normals->m[1][i+2]+=normal[1];
+		    v_normals->m[2][i+2]+=normal[2];
+		  }
 		}
 	}
+	printf("here0\n");
 	//for efficiency, stores I values so that we don't have to calculate again
 	//struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
 	//SETTING VERTEX NORMALS END========================================================================*/
-	printf("here2\n");
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -250,6 +230,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			}
 			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
+			printf("here\n");
 			for( j = 0; j < vertices->lastcol; j++){
 
 				if(nearly_equal(vertices->m[0][j], xT)&&nearly_equal(vertices->m[1][j],yT)&&nearly_equal(vertices->m[2][j],zT)){
@@ -354,6 +335,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				}
 				
 			}
+			printf("here2\n");
 			//printf("here3\n");
 			//3 outlines
 			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
@@ -543,8 +525,10 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			 draw_line(xL,y,zL,xR,y,zR,s,c,zbuf);
 			 y+=1;
 		 }
+	   
 		free(normal);*/
 	 }
+		printf("here3\n");
  }
 }
 
