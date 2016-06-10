@@ -91,7 +91,7 @@ void * normalize(double * v) {
   v[2] = v[2] / length;
 }
 
-int nearly_equal(double * n1, double * n2){
+int nearly_equal(double n1, double n2){
   if(n1-n2>0.00001)
     return 0;
   else

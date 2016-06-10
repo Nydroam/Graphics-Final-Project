@@ -10,5 +10,5 @@ double calculate_dot(double * v1, double * v2);
 
 void * normalize(double * v);
 
-int nearly_equal(double * n1, double * n2);
+int nearly_equal(double n1, double n2);
 #endif

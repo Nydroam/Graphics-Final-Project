@@ -90,7 +90,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	view[0] = 0;
 	view[1] = 0;
 	view[2] = -1;
-	/*SETTING VERTEX NORMALS================================================================================
+	//SETTING VERTEX NORMALS================================================================================
 	struct matrix* vertices = new_matrix(4,1000);
 	struct matrix* v_normals = new_matrix(4,1000);
 	for( i=0; i < polygons->lastcol-2; i+=3){
@@ -145,7 +145,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	}
 	//for efficiency, stores I values so that we don't have to calculate again
 	struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
-	SETTING VERTEX NORMALS END========================================================================*/
+	//SETTING VERTEX NORMALS END========================================================================*/
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -221,7 +221,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					zM = polygons->m[2][i+1];
 				}
 			}
-			/*GOURAUD SHADING HERE=====================================================================
+			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			for( j = 0; j < vertices->lastcol; j++){
 
@@ -407,8 +407,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			 draw_line(xL,y,zL,xR,y,zR,s,zbuf,cL,cR);
 			 y+=1;
 		 	}
-			GOURAUD ATTEMPT END =====================================================================*/
-			//SHADING HERE-------------------------------------------------
+			//GOURAUD ATTEMPT END =====================================================================*/
+			/*//SHADING HERE-------------------------------------------------
 			//ambient
 			Ia.red = ambient.red * rcolor->r[0];
 			Ia.green = ambient.green * rcolor->r[1];
@@ -515,7 +515,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			 draw_line(xL,y,zL,xR,y,zR,s,c,zbuf);
 			 y+=1;
 		 }
-		free(normal);
+		free(normal);*/
 	 }
  }
 }
@@ -1085,11 +1085,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	}
 	
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
-	/*
+	
 	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
 	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
 	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
-	*/
+	
 			}
 		}
 
@@ -1108,11 +1108,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy - dx;
 	}
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	/*
+	
 	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
 	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
 	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
-	*/
+	
 			}
 		}
 	}
@@ -1138,11 +1138,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy + dx;
 	}
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
-	/*
+	
 	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
 	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
 	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
-	*/
+	
 	//printf("3%f %f\n",z,z1);
 			}
 		}
@@ -1165,11 +1165,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 		d = d + dy + dx;
 	}
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	/*
+	
 	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
 	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
 	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
-	*/
+	
 			}
 		}
 	}
