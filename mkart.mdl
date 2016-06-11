@@ -1,6 +1,5 @@
 frames 100
 basename mkart
-ambient 100 100 100
 light mylight 400 450 120 255 255 51
 push
 move 250 150 0
@@ -9,30 +8,36 @@ move 0 100 900 vert
 rotate x 15
 rotate y -15 wheels
 scale 1 1 1 fade
-constants one 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 0 255 0
+ambient 0 255 0
+constants one 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 box -100 30 125 200 60 250
 box -80 60 -75 160 30 50
 box -80 80 -25 160 20 100
-constants two 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 150 150 150
+ambient 150 150 150
+constants two 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 box -80 100 105 160 90 40
 box -80 40 65 160 30 100
 push
 move 0 20 0
 push
 scale 1 1 1.1
-constants three 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 0 255 0
+ambient 0 255 0
+constants three 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 sphere 0 100 20 60
-constants four 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 255 255 255
+ambient 255 255 255
+constants four 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 sphere 0 100 80 50
 pop
 push
 scale 1 1.8 1
-constants five 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 0 255 0
+ambient 0 255 0
+constants five 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 sphere -20 90 100 20
 sphere 20 90 100 20
 pop
 pop
-constants six 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 150 150 150
+ambient 150 150 150
+constants six 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 push
 move -125 0 75
 rotate z 90
@@ -61,8 +66,8 @@ rotate y -720 spin
 scale 0.8 1.2 0.8
 torus 0 0 0 25 50
 pop
-
-constants seven 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 255 255 70
+ambient 255 255 70
+constants seven 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 push
 move -125 0 75
 rotate z 90
@@ -101,10 +106,12 @@ move 500 500 900 hit
 move 500 100 0 out
 rotate y 1080 spin
 scale 1.6 1 1.5 zoom
-constants eight 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 45 252 70
+ambient 45 252 70
+constants eight 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 sphere 0 0 0 50
 rotate z 10
-constants nine 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8 255 255 255
+ambient 255 255 255
+constants nine 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
 torus 0 -10 0 5 55
 rotate z -20
 torus 0 -10 0 5 55
