@@ -355,7 +355,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//3 outlines
 			// printf("cT after: %f, %f, %f",cT.red, cT.green, cT.blue);
 			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
-			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cT);
+			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
 			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
 			//fill in
 			xL,xR = xB;
