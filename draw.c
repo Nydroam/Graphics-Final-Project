@@ -365,8 +365,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
 			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
 			//fill in
-			xL,xR = xB;
-			zL,zR = zB;
+			xL=xB,xR = xB;
+			zL=zB,zR = zB;
 			cL.red = cB.red,cR.red = cB.red;
 			cL.blue = cB.blue,cR.blue = cB.blue;
 			cL.green = cB.green,cR.green = cB.green;
