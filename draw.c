@@ -256,9 +256,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					//printf("normal after: %f, %f, %f\n", v_normals->m[0][j], v_normals->m[1][j], v_normals->m[2][j]);
 					//printf("normal after: %f, %f, %f\n", normal[0], normal[1], normal[2]);
 					normalize(normal);
-					light_v[0] = xT - point->l[0];
-					light_v[1] = yT - point->l[1];
-					light_v[2] = zT - point->l[2];
+					light_v[0] = point->l[0]-xT;
+					light_v[1] = point->l[1]-yT;
+					light_v[2] = point->l[2]-zT;
 					normalize(light_v);
 					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
 					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
@@ -297,9 +297,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					normal[1]=v_normals->m[1][j];
 					normal[2]=v_normals->m[2][j];
 					normalize(normal);
-					light_v[0] = xM - point->l[0];
-					light_v[1] = yM - point->l[1];
-					light_v[2] = zM - point->l[2];
+					light_v[0] = point->l[0]-xM;
+					light_v[1] = point->l[1]-yM;
+					light_v[2] = point->l[2]-zM;
 					normalize(light_v);
 					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
 					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
@@ -330,9 +330,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					normal[1]=v_normals->m[1][j];
 					normal[2]=v_normals->m[2][j];
 					normalize(normal);
-					light_v[0] = xB - point->l[0];
-					light_v[1] = yB - point->l[1];
-					light_v[2] = zB - point->l[2];
+					light_v[0] = point->l[0]-xB;
+					light_v[1] = point->l[1]-yB;
+					light_v[2] = point->l[2]-zB;
 					normalize(light_v);
 					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
 					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
