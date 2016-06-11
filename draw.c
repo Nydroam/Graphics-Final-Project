@@ -70,7 +70,7 @@ triangles
 jdyrlandweaver
 ====================*/
 void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light *point) {
-  printf("DRAWING\n");
+  // printf("DRAWING\n");
 	int i,j,x,y;  
 	double xB, yB, xM, yM, xT, yT, d0, d1, d2;
 	double ax, ay, az, bx, by, bz;
@@ -107,7 +107,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	    add_point(v_normals, 0, 0, 0);
 	  }
 	}
-	printf("%d\n",vertices->lastcol);
+	// printf("%d\n",vertices->lastcol);
 	for( i=0; i < polygons->lastcol-2; i+=3){
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -1125,8 +1125,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, s
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
 	
 	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
-	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
-	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
 	
 			}
 		}
@@ -1148,8 +1148,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, s
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
 	
 	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
-	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
-	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
 	
 			}
 		}
@@ -1178,8 +1178,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, s
 	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
 	
 	c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
-	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
-	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
 	
 	//printf("3%f %f\n",z,z1);
 			}
@@ -1205,8 +1205,8 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, s
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
 	
 	c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
-	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
-	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
 	
 			}
 		}

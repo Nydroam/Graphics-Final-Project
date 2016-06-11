@@ -247,21 +247,21 @@
   			for (i=0;i<lastop;i++) {
   				switch (op[i].opcode) {
   				case CONSTANTS:
-				  printf("CONSTANTS\n");
+				  // printf("CONSTANTS\n");
           rcolor = lookup_symbol(op[i].op.constants.p->name)->s.c;
   				break;
   				case AMBIENT:
-				  printf("AMBIENT\n");
+				  // printf("AMBIENT\n");
   				ambient.red = op[i].op.ambient.c[0];
   				ambient.green = op[i].op.ambient.c[1];
   				ambient.blue = op[i].op.ambient.c[2];
   				break;
   				case LIGHT:
-				  printf("LIGHT\n");
+				  // printf("LIGHT\n");
           point = lookup_symbol(op[i].op.light.p->name)->s.l;
           break;
   				case SPHERE:
-				  printf("START\n");
+				  // printf("START\n");
   					add_sphere( tmp,op[i].op.sphere.d[0], //cx
 					op[i].op.sphere.d[1], //cy
 					op[i].op.sphere.d[2], //cz
@@ -271,7 +271,7 @@
   					matrix_mult( s->data[ s->top ], tmp );
   					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point );
   					tmp->lastcol = 0;
-					printf("DONE\n");
+					// printf("DONE\n");
   				break;
   				case TORUS:
 					add_torus( tmp, op[i].op.torus.d[0], //cx
@@ -307,7 +307,7 @@
 				break;*/
 				case MOVE:
 				  //get the factors
-				  printf("MOVE\n");
+				  // printf("MOVE\n");
 				xval = op[i].op.move.d[0];
 				yval = op[i].op.move.d[1];
 				zval = op[i].op.move.d[2];
@@ -365,16 +365,16 @@
 				break;
 				}
 			}
-			printf("SAVING\n");
+			// printf("SAVING\n");
 			if(num_frames>1){
 			sprintf(frame_name, "./anim/%s%03d.png", name, f);
 			save_extension(t, frame_name);
-			printf("AFTERSAVE\n");
+			// printf("AFTERSAVE\n");
 			}
 			
 			//free_stack( s );
 		//	free_matrix( tmp );
 	// free_matrix( transform );
-		printf("VERY END\n");
+		// printf("VERY END\n");
 	}
 }

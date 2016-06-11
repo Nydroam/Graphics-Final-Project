@@ -157,8 +157,9 @@ void save_extension( screen s, char *file) {
   f = popen(line, "w");
   fprintf(f, "P3\n%d %d\n%d\n", XRES, YRES, MAX_COLOR);
   for ( y=0; y < YRES; y++ ) {
-    for ( x=0; x < XRES; x++) 
-      
+    for ( x=0; x < XRES; x++)
+      // if ((int) s[x][y].blue < 0 || (int) s[x][y].blue > 255)
+      //   printf("color: %d, %d, %d\n",(int) s[x][y].red, (int) s[x][y].green, (int) s[x][y].blue);
       fprintf(f, "%d %d %d ", (int) s[x][y].red, (int) s[x][y].green, (int) s[x][y].blue);
     fprintf(f, "\n");
   }
