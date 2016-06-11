@@ -82,6 +82,7 @@ void plot( screen s, color c, int x, int y, int z, struct matrix *zbuf) {
     s[x][newy] = c;
     zbuf->m[x][newy]=z;
   }
+  // printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
 
 /*======== void clear_screen() ==========
@@ -126,7 +127,7 @@ void save_ppm( screen s, char *file) {
   for ( y=0; y < YRES; y++ ) {
     for ( x=0; x < XRES; x++) 
       
-      fprintf(f, "%d %d %d ", s[x][y].red, s[x][y].green, s[x][y].blue);
+      fprintf(f, "%d %d %d ", (int) s[x][y].red, (int) s[x][y].green, (int) s[x][y].blue);
     fprintf(f, "\n");
   }
   fclose(f);
@@ -158,7 +159,7 @@ void save_extension( screen s, char *file) {
   for ( y=0; y < YRES; y++ ) {
     for ( x=0; x < XRES; x++) 
       
-      fprintf(f, "%d %d %d ", s[x][y].red, s[x][y].green, s[x][y].blue);
+      fprintf(f, "%d %d %d ", (int) s[x][y].red, (int) s[x][y].green, (int) s[x][y].blue);
     fprintf(f, "\n");
   }
   pclose(f);
