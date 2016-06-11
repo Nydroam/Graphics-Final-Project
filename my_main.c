@@ -208,8 +208,8 @@
   	num_frames = 1;
   	step = 5;
   	g.red = 0;
-  	g.green = 255;
-  	g.blue = 255;
+  	g.green = 0;
+  	g.blue = 0;
 
   	struct matrix *zbuffer;
 
