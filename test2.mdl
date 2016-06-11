@@ -1,7 +1,12 @@
-push
 move 250 250 0
-constants colors 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5
-ambient 100 100 100
-light mylight 100 100 800 100 200 255
-sphere 0 0 0 100 
+light mylight 400 450 120 255 255 51
+ambient 153 0 0
+constants red 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
+sphere -100 -40 20 100
+ambient 0 153 0
+constants green 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
+sphere 0 0 -100 100
+ambient 0 0 153
+constants blue 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
+sphere 100 40 -220 100
 display
