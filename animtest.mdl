@@ -6,7 +6,7 @@ move 500 0 0 spinny
 constants colors 0.1 0.1 0.1 0.3 0.3 0.3 1 1 1
 ambient 100 100 100
 light mylight 400 400 120 100 200 255
-sphere 0 -30 0 100
-sphere 0 0 -50 100
-sphere 0 30 -150 100
+sphere 0 -40 20 100
+sphere 40 0 -100 100
+sphere 80 40 -220 100
 vary spinny 0 49 0 1
