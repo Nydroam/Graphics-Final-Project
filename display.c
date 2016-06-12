@@ -9,6 +9,7 @@ for red, green and blue respectively
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "gmath.h"
 #include "ml6.h"
