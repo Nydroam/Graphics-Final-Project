@@ -1310,15 +1310,21 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		x = x1;
 		y = y1;
 		z = z1;
-		n = n1;
+		n[0] = n1[0];
+		n[1] = n1[0];
+		n[2] = n1[2];
 		x1 = x0;
 		y1 = y0;
 		z1 = z0;
-		n1 = n0;
+		n1[0] = n0[0];
+		n1[1] = n0[1];
+		n1[2] = n0[2];
 		x0 = x;
 		y0 = y;
 		z0 = z;
-		n0 = n;
+		n0[0] = n[0];
+		n0[1] = n[1];
+		n0[2] = n[2];
       	}
 
 	//need to know dx and dy for this version
