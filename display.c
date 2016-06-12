@@ -100,6 +100,7 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
   c.green = 0;
   c.blue = 0;
   if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z > (int)zbuf->m[x][newy]){
+    //printf("%f %f %f\n",normal[0],normal[1],normal[2]);
     for(i = 0; point[i];i++){
       //ambient
       Ia.red = ambient.red * rcolor->r[0];
@@ -128,9 +129,9 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.blue = point[i]->c[2] * rcolor->b[2] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
 
-      c.red += Ia.red + Id.red + Is.red;
-      c.blue += Ia.blue + Id.blue + Is.blue;
-      c.green += Ia.green + Id.green + Is.green;
+      c.red = Ia.red + Id.red + Is.red;
+      c.blue = Ia.blue + Id.blue + Is.blue;
+      c.green = Ia.green + Id.green + Is.green;
       c.red = c.red>255?255:c.red;
       c.red = c.red<0?0:c.red;
       c.green = c.green>255?255:c.green;

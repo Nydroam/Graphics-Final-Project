@@ -766,6 +766,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				nR[2] = nB[2] + d1*(y-yB);
 			      }
 			    }
+			    //printf("%f %f %f\n",nL[0], nL[1], nL[2]);
 			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,rcolor,ambient,point);
 			    y+=1;
 			  }  
