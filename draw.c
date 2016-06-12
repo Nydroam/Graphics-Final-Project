@@ -316,11 +316,11 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
       					cT.blue = Ia.blue + Id.blue + Is.blue;
 					cT.green = Ia.green + Id.green + Is.green;
 					cT.red = cT.red>255?255:cT.red;
-			cT.red = cT.red<0?0:cT.red;
-			cT.green = cT.green>255?255:cT.green;
-			cT.green = cT.green<0?0:cT.green;
-			cT.blue = cT.blue>255?255:cT.blue;
-			cT.blue = cT.blue<0?0:cT.blue;
+					cT.red = cT.red<0?0:cT.red;
+					cT.green = cT.green>255?255:cT.green;
+					cT.green = cT.green<0?0:cT.green;
+					cT.blue = cT.blue>255?255:cT.blue;
+					cT.blue = cT.blue<0?0:cT.blue;
 					add_point(t_vals,cT.red,cT.green,cT.blue);
 					// printf("cT before: %f, %f, %f",cT.red, cT.green, cT.blue);
 				}
@@ -405,19 +405,19 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			cB.green = 0;
 			
 			for(k = 0; k < t_vals->lastcol; k++){
-			  cT.red+=t_vals->m[0][k];
-			  cT.green +=t_vals->m[1][k];
-			  cT.blue+=t_vals->m[2][k];
+			  cT.red=t_vals->m[0][k];
+			  cT.green=t_vals->m[1][k];
+			  cT.blue=t_vals->m[2][k];
 			}
 			for(k = 0; k < m_vals->lastcol; k++){
-			  cM.red+=m_vals->m[0][k];
-			  cM.green +=m_vals->m[1][k];
-			  cM.blue+=m_vals->m[2][k];
+			  cM.red=m_vals->m[0][k];
+			  cM.green=m_vals->m[1][k];
+			  cM.blue=m_vals->m[2][k];
 			}
 			for(k = 0; k < b_vals->lastcol; k++){
-			  cB.red+=b_vals->m[0][k];
-			  cB.green +=b_vals->m[1][k];
-			  cB.blue+=b_vals->m[2][k];
+			  cB.red=b_vals->m[0][k];
+			  cB.green=b_vals->m[1][k];
+			  cB.blue=b_vals->m[2][k];
 			}
 			cT.red = cT.red>255?255:cT.red;
 			cT.red = cT.red<0?0:cT.red;
@@ -440,7 +440,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			// printf("here2\n");
 			//printf("here3\n");
 			//3 outlines
-			 printf("cT after: %f, %f, %f\n",cT.red, cT.green, cT.blue);
+			 printf("cT after: %f, %f, %f\n",cB.red, cB.green, cB.blue);
 			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
 			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
 			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
