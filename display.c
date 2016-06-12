@@ -146,7 +146,7 @@ c.red = c.red>255?255:c.red;
     s[x][newy]=c;
     zbuf->m[x][newy]=z;
   }
-  //printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
+  printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
 
 /*======== void clear_screen() ==========

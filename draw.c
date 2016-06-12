@@ -662,7 +662,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		 }
 	   
 			}
-			else if(shading == 2){
+			else if(shading == 2){//PHONG ATTEMPT DSHFJDKFHJDKSFHKJSDHFDKSJHDSJKFHDSKJF
 			  for( j = 0; j < vertices->lastcol; j++){
 			    if(nearly_equal(vertices->m[0][j],xT)
 			       &&nearly_equal(vertices->m[1][j],yT)
@@ -686,7 +686,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nB[2] = v_normals->m[2][j];
 			    }
 			  }
-			  //PHONG ATTEMPT DSHFJDKFHJDKSFHKJSDHFDKSJHDSJKFHDSKJF
+			  
 			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
 			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
 			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
