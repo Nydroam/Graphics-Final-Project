@@ -10,6 +10,7 @@ for red, green and blue respectively
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "gmath.h"
 #include "ml6.h"
 #include "display.h"
 #include "matrix.h"
@@ -101,13 +102,13 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
   c.green = 0;
   c.blue = 0;
   if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z > (int)zbuf->m[x][newy]){
-    //printf("%f %f %f\n",normal[0],normal[1],normal[2]);
+    //printf("%f %f %f\n",n[0],n[1],n[2]);
     for(i = 0; point[i];i++){
       //ambient
       Ia.red = ambient.red * rcolor->r[0];
       Ia.green = ambient.green *rcolor->r[1];
       Ia.blue = ambient.blue *rcolor->r[2];
-
+      //printf("%f %f %f\n",Ia.red,Ia.green,Ia.blue);
       //light vector
       light_v[0] = x - point[i]->l[0];
       light_v[1] = y - point[i]->l[1];
@@ -116,20 +117,24 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       //normalize
       normalize(light_v);
       normalize(n);
-
+      //printf("%f %f %f\n",n[0],n[1],n[2]);
       //diffuse
       Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,n)*-1;
       Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,n)*-1;
       Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,n)*-1;
-
+      //printf("light_v: %f %f %f\n",light_v[0],light_v[1],light_v[2]);
+      //printf("normal: %f %f %f\n",n[0],n[1],n[2]);
+      
       //specular
       reflect[0] = 2 * calculate_dot(light_v, n)*n[0] - light_v[0];
       reflect[1] = 2 * calculate_dot(light_v, n)*n[1] - light_v[1];
       reflect[2] = 2 * calculate_dot(light_v, n)*n[2] - light_v[2];
+      printf("%f\n",calculate_dot(light_v, n));
+      //printf("%f %f %f\n",n[0],n[1],n[2]);
       Is.red = point[i]->c[0] * rcolor->b[0] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.blue = point[i]->c[2] * rcolor->b[2] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
-
+      //printf("%f %f %f\n",reflect[0],reflect[1],reflect[2]);
       c.red += Ia.red + Id.red + Is.red;
       c.blue += Ia.blue + Id.blue + Is.blue;
       c.green += Ia.green + Id.green + Is.green;
