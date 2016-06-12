@@ -216,9 +216,9 @@
   	struct constants *rcolor;
   	rcolor = (struct constants *)malloc(sizeof(struct constants));
   	color ambient;
-  	struct light *point;
-  	point = (struct light *)malloc(sizeof(struct light));
-
+  	struct light **point;
+  	point = (struct light **)malloc(10*sizeof(struct light*));
+	int l_index = 0;
   	first_pass();
 
   	if (num_frames > 1)
@@ -258,7 +258,8 @@
   				break;
   				case LIGHT:
 				  // printf("LIGHT\n");
-          point = lookup_symbol(op[i].op.light.p->name)->s.l;
+          point[l_index] = lookup_symbol(op[i].op.light.p->name)->s.l;
+	  l_index++;
           break;
   				case SPHERE:
 				  // printf("START\n");

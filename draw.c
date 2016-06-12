@@ -69,9 +69,9 @@ triangles
 04/16/13 13:13:27
 jdyrlandweaver
 ====================*/
-void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light *point) {
+void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light **point) {
   // printf("DRAWING\n");
-	int i,j,x,y;  
+  int i,j,k,x,y;  
 	double xB, yB, xM, yM, xT, yT, d0, d1, d2;
 	double ax, ay, az, bx, by, bz;
 	double * normal;
@@ -162,7 +162,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		    //if(j==1)
 		      //printf("%f %f %f\n",normal[0],normal[1],normal[2]);
 		    int add = 1;
-		    int k;
+		    
 		    if(vertices->lastcol<=8){
 		    for(k = 0; k < to_add[j]->lastcol;k++)
 		      if(nearly_equal(to_add[j]->m[0][k],normal[0])
@@ -270,6 +270,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			// printf("here\n");
+			for( k = 0; point[k]; k++){
 			for( j = 0; j < vertices->lastcol; j++){
 
 				if(nearly_equal(vertices->m[0][j], xT)&&nearly_equal(vertices->m[1][j],yT)&&nearly_equal(vertices->m[2][j],zT)){
@@ -284,13 +285,13 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					//printf("normal after: %f, %f, %f\n", v_normals->m[0][j], v_normals->m[1][j], v_normals->m[2][j]);
 					//printf("normal after: %f, %f, %f\n", normal[0], normal[1], normal[2]);
 					normalize(normal);
-					light_v[0] = xT-point->l[0];
-					light_v[1] = yT-point->l[1];
-					light_v[2] = zT-point->l[2];
+					light_v[0] = xT-point[k]->l[0];
+					light_v[1] = yT-point[k]->l[1];
+					light_v[2] = zT-point[k]->l[2];
 					normalize(light_v);
-					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
-					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
-					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+					Id.red = point[k]->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point[k]->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point[k]->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
 
 					// printf("light_v: %f, %f, %f", light_v[0], light_v[1], light_v[2]);
 					// printf("normal: %f, %f, %f", normal[0], normal[1], normal[2]);
@@ -300,21 +301,17 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
 					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
 					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
-					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+					Is.red = point[k]->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
 					// printf("cT before before: %f, %f, %f\n",cT.red, cT.green, cT.blue);
 					// printf("cT Ia: %f, Id: %f, Is: %f\n", Ia.red, Id.red, Is.red);
-					cT.red = Ia.red + Id.red + Is.red;
-					cT.red = cT.red>255?255:cT.red;
-					cT.red = cT.red<0?0:cT.red;
-					cT.blue = Ia.blue + Id.blue + Is.blue;
-					cT.blue = cT.blue>255?255:cT.blue;
-					cT.blue = cT.blue<0?0:cT.blue;      
-					cT.green = Ia.green + Id.green + Is.green;
-					cT.green = cT.green>255?255:cT.green;
-					cT.green = cT.green<0?0:cT.green;
+					cT.red += Ia.red + Id.red + Is.red;
+      					cT.blue += Ia.blue + Id.blue + Is.blue;
+					cT.green += Ia.green + Id.green + Is.green;
+					
+					
 					// printf("cT before: %f, %f, %f",cT.red, cT.green, cT.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xM)&&nearly_equal(vertices->m[1][j],yM)&&nearly_equal(vertices->m[2][j],zM)){
@@ -325,30 +322,25 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					normal[1]=v_normals->m[1][j];
 					normal[2]=v_normals->m[2][j];
 					normalize(normal);
-					light_v[0] = xM-point->l[0];
-					light_v[1] = yM-point->l[1];
-					light_v[2] = zM-point->l[2];
+					light_v[0] = xM-point[k]->l[0];
+					light_v[1] = yM-point[k]->l[1];
+					light_v[2] = zM-point[k]->l[2];
 					normalize(light_v);
-					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
-					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
-					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+					Id.red = point[k]->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point[k]->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point[k]->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
 
 					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
 					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
 					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
-					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+					Is.red = point[k]->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
-					cM.red = Ia.red + Id.red + Is.red;
-					cM.red = cM.red>255?255:cM.red;
-					cM.red = cM.red<0?0:cM.red;
-					cM.blue = Ia.blue + Id.blue + Is.blue;
-					cM.blue = cM.blue>255?255:cM.blue;
-					cM.blue = cM.blue<0?0:cM.blue;      
-					cM.green = Ia.green + Id.green + Is.green;
-					cM.green = cM.green>255?255:cM.green;
-					cM.green = cM.green<0?0:cM.green;
+					cM.red += Ia.red + Id.red + Is.red;
+					cM.blue += Ia.blue + Id.blue + Is.blue;					
+					cM.green += Ia.green + Id.green + Is.green;
+					
 				}
 				if(nearly_equal(vertices->m[0][j], xB)&&nearly_equal(vertices->m[1][j],yB)&&nearly_equal(vertices->m[2][j],zB)){
 					Ia.red = ambient.red * rcolor->r[0];
@@ -358,33 +350,49 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					normal[1]=v_normals->m[1][j];
 					normal[2]=v_normals->m[2][j];
 					normalize(normal);
-					light_v[0] = xB-point->l[0];
-					light_v[1] = yB-point->l[1];
-					light_v[2] = zB-point->l[2];
+					light_v[0] = xB-point[k]->l[0];
+					light_v[1] = yB-point[k]->l[1];
+					light_v[2] = zB-point[k]->l[2];
 					normalize(light_v);
-					Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
-					Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
-					Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+					Id.red = point[k]->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+					Id.green = point[k]->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+					Id.blue = point[k]->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
 
 					reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
 					reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
 					reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
-					Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-					Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+					Is.red = point[k]->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+					Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
-					cB.red = Ia.red + Id.red + Is.red;
-					cB.red = cB.red>255?255:cB.red;
-					cB.red = cB.red<0?0:cB.red;
-					cB.blue = Ia.blue + Id.blue + Is.blue;
-					cB.blue = cB.blue>255?255:cB.blue;
-					cB.blue = cB.blue<0?0:cB.blue;      
-					cB.green = Ia.green + Id.green + Is.green;
-					cB.green = cB.green>255?255:cB.green;
-					cB.green = cB.green<0?0:cB.green;
+					cB.red += Ia.red + Id.red + Is.red;
+      					cB.blue += Ia.blue + Id.blue + Is.blue;
+					cB.green += Ia.green + Id.green + Is.green;
+
 				}
 				
-			}
+			}}
+			cT.red = cT.red>255?255:cT.red;
+	      		cT.red = cT.red<0?0:cT.red;
+			cT.green = cT.green>255?255:cT.green;
+			cT.green = cT.green<0?0:cT.green;
+			cT.blue = cT.blue>255?255:cT.blue;
+			cT.blue = cT.blue<0?0:cT.blue;
+			
+			cM.red = cM.red>255?255:cM.red;
+	      		cM.red = cM.red<0?0:cM.red;
+			cM.green = cM.green>255?255:cM.green;
+			cM.green = cM.green<0?0:cM.green;
+			cM.blue = cM.blue>255?255:cM.blue;
+			cM.blue = cM.blue<0?0:cM.blue;
+			
+			cB.red = cB.red>255?255:cB.red;
+	      		cB.red = cB.red<0?0:cB.red;
+			cB.green = cB.green>255?255:cB.green;
+			cB.green = cB.green<0?0:cB.green;
+			cB.blue = cB.blue>255?255:cB.blue;
+			cB.blue = cB.blue<0?0:cB.blue;
+			
 			// printf("here2\n");
 			//printf("here3\n");
 			//3 outlines
