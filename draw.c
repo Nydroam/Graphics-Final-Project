@@ -321,7 +321,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cT.green = cT.green<0?0:cT.green;
 					cT.blue = cT.blue>255?255:cT.blue;
 					cT.blue = cT.blue<0?0:cT.blue;
-					add_point(t_vals,cT.red,cT.green,cT.blue);
+					if(k==t_vals->lastcol)
+					  add_point(t_vals,cT.red,cT.green,cT.blue);
 					// printf("cT before: %f, %f, %f",cT.red, cT.green, cT.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xM)&&nearly_equal(vertices->m[1][j],yM)&&nearly_equal(vertices->m[2][j],zM)){
@@ -356,7 +357,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cM.green = cM.green<0?0:cM.green;
 					cM.blue = cM.blue>255?255:cM.blue;
 					cM.blue = cM.blue<0?0:cM.blue;
-					add_point(m_vals,cM.red,cM.green,cM.blue);
+					if(k==m_vals->lastcol)
+					  add_point(m_vals,cM.red,cM.green,cM.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xB)&&nearly_equal(vertices->m[1][j],yB)&&nearly_equal(vertices->m[2][j],zB)){
 					Ia.red = ambient.red * rcolor->r[0];
@@ -390,7 +392,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cB.green = cB.green<0?0:cB.green;
 					cB.blue = cB.blue>255?255:cB.blue;
 					cB.blue = cB.blue<0?0:cB.blue;
-					add_point(b_vals,cB.red,cB.green,cB.blue);
+					if(k==b_vals->lastcol)
+					  add_point(b_vals,cB.red,cB.green,cB.blue);
 				}
 				
 			}}
@@ -403,8 +406,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			cB.red = 0;
 			cB.blue = 0;
 			cB.green = 0;
-			
+			printf("BEGIN\n");
 			for(k = 0; k < t_vals->lastcol; k++){
+			  printf("TOP\n");
 			  cT.red=t_vals->m[0][k];
 			  cT.green=t_vals->m[1][k];
 			  cT.blue=t_vals->m[2][k];
@@ -419,6 +423,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			  cB.green=b_vals->m[1][k];
 			  cB.blue=b_vals->m[2][k];
 			}
+			printf("END\n");
 			cT.red = cT.red>255?255:cT.red;
 			cT.red = cT.red<0?0:cT.red;
 			cT.green = cT.green>255?255:cT.green;
@@ -440,7 +445,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			// printf("here2\n");
 			//printf("here3\n");
 			//3 outlines
-			 printf("cT after: %f, %f, %f\n",cB.red, cB.green, cB.blue);
+			//printf("cT after: %f, %f, %f\n",cB.red, cB.green, cB.blue);
 			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
 			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
 			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
