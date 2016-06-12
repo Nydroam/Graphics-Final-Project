@@ -129,7 +129,7 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       reflect[0] = 2 * calculate_dot(light_v, n)*n[0] - light_v[0];
       reflect[1] = 2 * calculate_dot(light_v, n)*n[1] - light_v[1];
       reflect[2] = 2 * calculate_dot(light_v, n)*n[2] - light_v[2];
-      printf("%f\n",calculate_dot(light_v, n));
+      //printf("%f\n",calculate_dot(light_v, n));
       //printf("%f %f %f\n",n[0],n[1],n[2]);
       Is.red = point[i]->c[0] * rcolor->b[0] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);

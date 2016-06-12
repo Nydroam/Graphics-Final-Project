@@ -694,7 +694,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
 			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
 			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
-			  /*xR = xB;
+			  xR = xB;
 			  zR = zB;
 			  nL[0] = nB[0];
 			  nL[1] = nB[1];
@@ -773,7 +773,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			    //printf("%f %f %f\n",nL[0], nL[1], nL[2]);
 			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,rcolor,ambient,point);
 			    y+=1;
-			    }*/
+			    }
 			}  
 			    //PHONG END
 			
