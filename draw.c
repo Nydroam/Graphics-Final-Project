@@ -385,11 +385,11 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
       					cB.blue = Ia.blue + Id.blue + Is.blue;
 					cB.green = Ia.green + Id.green + Is.green;
 					cB.red = cB.red>255?255:cB.red;
-			cB.red = cB.red<0?0:cB.red;
-			cB.green = cB.green>255?255:cB.green;
-			cB.green = cB.green<0?0:cB.green;
-			cB.blue = cB.blue>255?255:cB.blue;
-			cB.blue = cB.blue<0?0:cB.blue;
+					cB.red = cB.red<0?0:cB.red;
+					cB.green = cB.green>255?255:cB.green;
+					cB.green = cB.green<0?0:cB.green;
+					cB.blue = cB.blue>255?255:cB.blue;
+					cB.blue = cB.blue<0?0:cB.blue;
 					add_point(b_vals,cB.red,cB.green,cB.blue);
 				}
 				
@@ -414,7 +414,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			  cM.green +=m_vals->m[1][k];
 			  cM.blue+=m_vals->m[2][k];
 			}
-			for(k = 0; k < t_vals->lastcol; k++){
+			for(k = 0; k < b_vals->lastcol; k++){
 			  cB.red+=b_vals->m[0][k];
 			  cB.green +=b_vals->m[1][k];
 			  cB.blue+=b_vals->m[2][k];
