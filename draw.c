@@ -406,9 +406,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			cB.red = 0;
 			cB.blue = 0;
 			cB.green = 0;
-			printf("BEGIN\n");
+			//printf("BEGIN\n");
 			for(k = 0; k < t_vals->lastcol; k++){
-			  printf("TOP\n");
+			  //printf("TOP\n");
 			  cT.red+=t_vals->m[0][k];
 			  cT.green+=t_vals->m[1][k];
 			  cT.blue+=t_vals->m[2][k];
@@ -423,7 +423,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			  cB.green+=b_vals->m[1][k];
 			  cB.blue+=b_vals->m[2][k];
 			}
-			printf("END\n");
+			//xprintf("END\n");
 			cT.red = cT.red>255?255:cT.red;
 			cT.red = cT.red<0?0:cT.red;
 			cT.green = cT.green>255?255:cT.green;
