@@ -138,11 +138,13 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       c.green = c.green<0?0:c.green;
       c.blue = c.blue>255?255:c.blue;
       c.blue = c.blue<0?0:c.blue;
+
+      //printf("lighting\n");
     }
     s[x][newy]=c;
     zbuf->m[x][newy]=z;
   }
-  // printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
+  //printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
 
 /*======== void clear_screen() ==========
