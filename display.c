@@ -82,6 +82,7 @@ void plot( screen s, color c, int x, int y, int z, struct matrix *zbuf) {
     s[x][newy] = c;
     zbuf->m[x][newy]=z;
   }
+  //printf("plot?\n");
   // printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
 void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, struct constants *rcolor, color ambient, struct light ** point) {
@@ -95,7 +96,7 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
   view[1]=0;
   view[2]=-1;
   color c;
-  double * normal = n;
+  
   c.red = 0;
   c.green = 0;
   c.blue = 0;
@@ -117,14 +118,14 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       normalize(n);
 
       //diffuse
-      Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,normal)*-1;
-      Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,normal)*-1;
-      Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,normal)*-1;
+      Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,n)*-1;
+      Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,n)*-1;
+      Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,n)*-1;
 
       //specular
-      reflect[0] = 2 * calculate_dot(light_v, normal)*normal[0] - light_v[0];
-      reflect[1] = 2 * calculate_dot(light_v, normal)*normal[1] - light_v[1];
-      reflect[2] = 2 * calculate_dot(light_v, normal)*normal[2] - light_v[2];
+      reflect[0] = 2 * calculate_dot(light_v, n)*n[0] - light_v[0];
+      reflect[1] = 2 * calculate_dot(light_v, n)*n[1] - light_v[1];
+      reflect[2] = 2 * calculate_dot(light_v, n)*n[2] - light_v[2];
       Is.red = point[i]->c[0] * rcolor->b[0] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.blue = point[i]->c[2] * rcolor->b[2] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
