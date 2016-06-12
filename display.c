@@ -78,7 +78,7 @@ jdyrlandweaver
 ====================*/
 void plot( screen s, color c, int x, int y, int z, struct matrix *zbuf) {
   int newy = YRES - 1 - y;
-  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z >= zbuf->m[x][newy]){
+  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z > zbuf->m[x][newy]){
     s[x][newy] = c;
     zbuf->m[x][newy]=z;
   }
