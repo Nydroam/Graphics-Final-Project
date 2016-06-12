@@ -177,13 +177,13 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		      //printf("%f %f %f\n",normal[0],normal[1],normal[2]);
 		    int add = 1;
 		    
-		    /*if(vertices->lastcol<=8){
+		    if(vertices->lastcol<=8){
 		    for(k = 0; k < to_add[j]->lastcol;k++)
 		      if(nearly_equal(to_add[j]->m[0][k],normal[0])
 			 &&nearly_equal(to_add[j]->m[1][k],normal[1])
 			 &&nearly_equal(to_add[j]->m[2][k],normal[2]))
 			add = 0;
-		    }*/
+		    }
 		    if(add){
 		      //printf("normal: %f %f %f\n", normal[0],normal[1],normal[2]);
 		      add_point(to_add[j],normal[0],normal[1],normal[2]);

@@ -3,6 +3,7 @@
 
 #include "symtab.h"
 #include "matrix.h"
+#include "gmath.h"
 void plot( screen s, color c, int x, int y, int z, struct matrix* zbuf);
 void plot1( screen s, int x, int y, int z, struct matrix* zbuf, double *n, struct constants * rcolor, color ambient, struct light ** point);
 void clear_screen( screen s);
