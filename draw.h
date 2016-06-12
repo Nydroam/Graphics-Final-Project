@@ -10,7 +10,7 @@
 #define LSPECULAR 2
 #define FLAT 0
 #define GOURAUD 1
-#define PHONG 1
+#define PHONG 2
 
 void draw_line1(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1);
 void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf);

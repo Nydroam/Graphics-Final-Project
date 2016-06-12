@@ -767,6 +767,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      }
 			    }
 			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,rcolor,ambient,point);
+			    y+=1;
 			  }  
 			    //PHONG END
 			  
