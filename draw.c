@@ -81,6 +81,13 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double xL,xR;
 	double zB, zM, zT;
 	double zL,zR;
+	double* nB, nM, nT, nL, nR;
+	nB = (double *)malloc(3*sizeof(double));
+	nM = (double *)malloc(3*sizeof(double));
+	nT = (double *)malloc(3*sizeof(double));
+	nL = (double *)malloc(3*sizeof(double));
+	nR = (double *)malloc(3*sizeof(double));
+	
 	//color c;
 	color Ia, Id, Is;
 	color cB, cM, cT;
@@ -650,10 +657,120 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			 y+=1;
 		 }
 	   
+			}
+			else if(shading == 2){
+			  for( j = 0; j < vertices->lastcol; j++){
+			    if(nearly_equal(vertices->m[0][j],xT)
+			       &&nearly_equal(vertices->m[1][j],yT)
+			       &&nearly_equal(vertices->m[2][j],zT)){
+			      nT[0] = v_normals->m[0][j];
+			      nT[1] = v_normals->m[1][j];
+			      nT[2] = v_normals->m[2][j];
+			    }
+			    if(nearly_equal(vertices->m[0][j],xM)
+			       &&nearly_equal(vertices->m[1][j],yM)
+			       &&nearly_equal(vertices->m[2][j],zM)){
+			      nM[0] = v_normals->m[0][j];
+			      nM[1] = v_normals->m[1][j];
+			      nM[2] = v_normals->m[2][j];
+			    }
+			    if(nearly_equal(vertices->m[0][j],xB)
+			       &&nearly_equal(vertices->m[1][j],yB)
+			       &&nearly_equal(vertices->m[2][j],zB)){
+			      nB[0] = v_normals->m[0][j];
+			      nB[1] = v_normals->m[1][j];
+			      nB[2] = v_normals->m[2][j];
+			    }
+			  }
+			  //PHONG ATTEMPT DSHFJDKFHJDKSFHKJSDHFDKSJHDSJKFHDSKJF
+			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, point);
+			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, point);
+			  draw_line3( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT, point);
+			  xR = xB;
+			  zR = zB;
+			  nL[0] = nB[0];
+			  nL[1] = nB[1];
+			  nL[2] = nB[2];
+			  nR[0] = nB[0];
+			  nR[1] = nB[1];
+			  nR[2] = nB[2];
+			  y = yB;
+			  while(y<(int)yT){
+			    if(y==(int)yB){
+			      xL = xB;
+			      zL = zB;
+			      nL[0] = nB[0];
+			      nL[1] = nB[1];
+			      nL[2] = nB[2];
+			    }
+			    else{
+			      
+			      d0 = (xT-xB)/(yT-yB);
+			      xL = xB + d0*(y-yB);
+			      d0 = (zT-zB)/(yT-yB);
+			      zL = zB + d0*(y-yB);
+
+			      d0 = (nT[0]-nB[0])/(yT-yB);
+			      nL[0] = nB[0] + d0*(y-yB);
+			      d0 = (nT[1]-nB[1])/(yT-yB);
+			      nL[1] = nB[1] + d0*(y-yB);
+			      d0 = (nT[2]-nB[2])/(yT-yB);
+			      nL[2] = nB[2] + d0*(y-yB);
+			      
+			    }
+			    if (y >= (int) yM){
+			      if(y==(int)yM){
+				xR = xM;
+				zR = zM;
+				nR[0] = nM[0];
+				nR[1] = nM[1];
+				nR[2] = nM[2];
+			      }
+			      else{
+				d2 = (xT-xM)/(yT-yM);
+				xR = xM + d2*(y-yM);
+				d2 = (zT-zM)/(yT-yM);
+				zR = zM + d2*(y-yM);
+
+				d2 = (nT[0]-nM[0])/(yT-yM);
+				nL[0] = nM[0] + d2*(y-yM);
+				d2 = (nT[1]-nM[1])/(yT-yM);
+				nL[1] = nM[1] + d2*(y-yM);
+				d2 = (nT[2]-nM[2])/(yT-yM);
+				nL[2] = nM[2] + d2*(y-yM);
+			      }
+			    }
+			    else{
+			      if(y==(int)yB){
+				xR = xB;
+				zR = zB;
+				nR[0] = nB[0];
+				nR[1] = nB[1];
+				nR[2] = nB[2];
+			      }
+			      else{
+				d1 = (xM-xB)/(yM-yB);
+				xR = xB + d1*(y-yB);
+				d1 = (zM-zB)/(yM-yB);
+				zR = zB + d1*(y-yB);
+
+				d1 = (nM[0]-nB[0])/(yM-yB);
+				nR[0] = nB[0] + d1*(y-yB);
+				d1 = (nM[1]-nB[1])/(yM-yB);
+				nR[1] = nB[1] + d1*(y-yB);
+				d1 = (nM[2]-nB[2])/(yM-yB);
+				nR[2] = nB[2] + d1*(y-yB);
+			      }
+			    }
+			    draw_line2(xL,y,zL,xR,y,zR,zbuf,nL,nR,point);
+			  }  
+			    //PHONG END
+			  
+			}
 		}
-		}
-		// printf("here3\n");
- }
+	}
+	// printf("here3\n");
+}
 }
 
 
