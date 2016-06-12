@@ -94,6 +94,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	//SETTING VERTEX NORMALS================================================================================
 	struct matrix* vertices = new_matrix(4,1000);
 	struct matrix* v_normals = new_matrix(4,1000);
+	//printf("%d\n",shading);
 	if(shading>0){
 	//struct matrix* to_add = new_matrix(4,1000);
 	// printf("HERE\n");
