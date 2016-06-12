@@ -130,9 +130,9 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
       Is.blue = point[i]->c[2] * rcolor->b[2] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
 
-      c.red = Ia.red + Id.red + Is.red;
-      c.blue = Ia.blue + Id.blue + Is.blue;
-      c.green = Ia.green + Id.green + Is.green;
+      c.red += Ia.red + Id.red + Is.red;
+      c.blue += Ia.blue + Id.blue + Is.blue;
+      c.green += Ia.green + Id.green + Is.green;
       c.red = c.red>255?255:c.red;
       c.red = c.red<0?0:c.red;
       c.green = c.green>255?255:c.green;
