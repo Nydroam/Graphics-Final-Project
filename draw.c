@@ -107,6 +107,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	  if(should_add){
 	    add_point(vertices,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
 	    add_point(v_normals, 0, 0, 0);
+	    //printf("%d: %f %f %f\n",vertices->lastcol,polygons->m[0][i],polygons->m[1][i],polygons->m[2][i]);
 	  }
 	}
 	//print_matrix(polygons);
@@ -122,6 +123,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		by = polygons->m[1][i+2] - polygons->m[1][i];
 		bz = polygons->m[2][i+2] - polygons->m[2][i];
 		normal = calculate_normal( ax, ay, az, bx, by, bz );
+		//printf("ON: %f %f %f",normal[0],normal[1],normal[2]);
 		//goes through vertices to see if the vertices of this polygon are in the vertices matrix, if they are, add their normals, else add to vertex matrix
 		//printf("START\n");
 		int add1, add2, add3;
@@ -150,6 +152,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		  //printf("%d, %d ,%d\n",add1, add2, add3);
 		  if(add1 || add2 || add3){
 		    //printf("WORKS\n");
+		    //printf("%f %f %f\n",normal[0],normal[1],normal[2]);
 		    v_normals->m[0][j]+=normal[0];
 		    v_normals->m[1][j]+=normal[1];
 		    v_normals->m[2][j]+=normal[2];
@@ -160,6 +163,13 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		   //printf("v_normals i+2: %f %f %f\n", v_normals->m[0][i+2],  v_normals->m[1][i+2],  v_normals->m[2][i+2]);
 		}//printf("END\n");
 	}
+	for(i = 0; i < v_normals->lastcol; i++){
+	  v_normals->m[0][i]=abs(v_normals->m[0][i]);
+	  v_normals->m[1][i]=abs(v_normals->m[1][i]);
+	  v_normals->m[2][i]=abs(v_normals->m[2][i]);
+	  
+	}
+	printf("v_normal for vertex 1: %f %f %f\n",v_normals->m[0][3],v_normals->m[1][3],v_normals->m[2][3]);
 	// printf("here0\n");
 	//for efficiency, stores I values so that we don't have to calculate again
 	//struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));

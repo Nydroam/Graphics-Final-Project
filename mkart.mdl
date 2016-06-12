@@ -9,7 +9,7 @@ rotate x 15
 rotate y -15 wheels
 scale 1 1 1 fade
 ambient 0 255 0
-constants one 0.4 0.4 0.4 0.7 0.7 0.7 0.8 0.8 0.8
+constants one 0.4 0.4 0.4 0.5 0.5 0.5 0.5 0.5 0.5
 //in order: car body car bumper body car bumper
 box -100 30 125 200 60 250
 box -80 60 -75 160 30 50
