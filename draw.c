@@ -315,7 +315,12 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cT.red = Ia.red + Id.red + Is.red;
       					cT.blue = Ia.blue + Id.blue + Is.blue;
 					cT.green = Ia.green + Id.green + Is.green;
-					
+					cT.red = cT.red>255?255:cT.red;
+			cT.red = cT.red<0?0:cT.red;
+			cT.green = cT.green>255?255:cT.green;
+			cT.green = cT.green<0?0:cT.green;
+			cT.blue = cT.blue>255?255:cT.blue;
+			cT.blue = cT.blue<0?0:cT.blue;
 					add_point(t_vals,cT.red,cT.green,cT.blue);
 					// printf("cT before: %f, %f, %f",cT.red, cT.green, cT.blue);
 				}
@@ -345,7 +350,12 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cM.red = Ia.red + Id.red + Is.red;
 					cM.blue = Ia.blue + Id.blue + Is.blue;					
 					cM.green = Ia.green + Id.green + Is.green;
-					
+					cM.red = cM.red>255?255:cM.red;
+					cM.red = cM.red<0?0:cM.red;
+					cM.green = cM.green>255?255:cM.green;
+					cM.green = cM.green<0?0:cM.green;
+					cM.blue = cM.blue>255?255:cM.blue;
+					cM.blue = cM.blue<0?0:cM.blue;
 					add_point(m_vals,cM.red,cM.green,cM.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xB)&&nearly_equal(vertices->m[1][j],yB)&&nearly_equal(vertices->m[2][j],zB)){
@@ -374,7 +384,12 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cB.red = Ia.red + Id.red + Is.red;
       					cB.blue = Ia.blue + Id.blue + Is.blue;
 					cB.green = Ia.green + Id.green + Is.green;
-					
+					cB.red = cB.red>255?255:cB.red;
+			cB.red = cB.red<0?0:cB.red;
+			cB.green = cB.green>255?255:cB.green;
+			cB.green = cB.green<0?0:cB.green;
+			cB.blue = cB.blue>255?255:cB.blue;
+			cB.blue = cB.blue<0?0:cB.blue;
 					add_point(b_vals,cB.red,cB.green,cB.blue);
 				}
 				
@@ -415,7 +430,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			cM.green = cM.green>255?255:cM.green;
 			cM.green = cM.green<0?0:cM.green;
 			cM.blue = cM.blue>255?255:cM.blue;
-			cM.blue = cM.blue<0?0:cM.blue;cM.red = cM.red>255?255:cM.red;
+			cM.blue = cM.blue<0?0:cM.blue;
 			cB.red = cB.red>255?255:cB.red;
 			cB.red = cB.red<0?0:cB.red;
 			cB.green = cB.green>255?255:cB.green;
