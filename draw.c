@@ -128,7 +128,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		by = polygons->m[1][i+2] - polygons->m[1][i];
 		bz = polygons->m[2][i+2] - polygons->m[2][i];
 		normal = calculate_normal( ax, ay, az, bx, by, bz );
-		normalize(normal);
+		//normalize(normal);
 		//printf("ON: %f %f %f",normal[0],normal[1],normal[2]);
 		//goes through vertices to see if the vertices of this polygon are in the vertices matrix, if they are, add their normals, else add to vertex matrix
 		//printf("START\n");
