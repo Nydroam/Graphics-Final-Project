@@ -762,7 +762,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				nR[2] = nB[2] + d1*(y-yB);
 			      }
 			    }
-			    draw_line2(xL,y,zL,xR,y,zR,zbuf,nL,nR,point);
+			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,point);
 			  }  
 			    //PHONG END
 			  
@@ -1282,8 +1282,161 @@ to the screen
 	} 	       
 }*/
 
+void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, nor) {
+//void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
+	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
+	int x, y, d, dx, dy;
+	double z, dz, dist;
+	//color c;
+	x = x0;
+	y = y0;
+	z = z0;
 
-void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
+	// c = c0;
+	//c.red = c0.red;
+	//c.green = c0.green;
+	//c.blue = c0.blue;
+	//swap points so we're always drawing left to right
+	if ( x0 > x1 ) {
+		//printf("flippy\n");
+		x = x1;
+		y = y1;
+		z = z1;
+		// c = c1;
+		//c.red = c1.red;
+		//c.green = c1.green;
+		//c.blue = c1.blue;
+		x1 = x0;
+		y1 = y0;
+		z1 = z0;
+		//c1 = c0;
+		x0 = x;
+		y0 = y;
+		z0 = z;
+		// c0 = c;
+		//c0.red = c.red;
+		//c0.green = c.green;
+		//c0.blue = c.blue;
+	}
+
+	//need to know dx and dy for this version
+	dx = (x1 - x) * 2;
+	dy = (y1 - y) * 2;
+	//printf("%d, %d, %d, %d, %d, %d, %d, %d\n",x,x0, x1,y, y0, y1, dx, dy);
+	//printf("draw_line\n");
+	//positive slope: Octants 1, 2 (5 and 6)
+	if ( dy == 0 && dx == 0 ){
+		//plot(s,c,x,y,z,zbuf);
+	}
+	else if ( dy > 0 ) {
+
+		//slope < 1: Octant 1 (5)
+		if ( dx > dy ) {
+			d = dy - ( dx / 2 );
+	
+			while ( x <= x1 ) {
+	plot(s, c, x, y, z, zbuf);
+	if ( d < 0 ) {
+		x = x + 1;
+		d = d + dy;
+	}
+	else {
+		x = x + 1;
+		y = y + 1;
+		d = d + dy - dx;
+	}
+	
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	
+			}
+		}
+
+		//slope > 1: Octant 2 (6)
+		else {
+			d = ( dy / 2 ) - dx;
+			while ( y <= y1 ) {
+	plot(s, c, x, y, z, zbuf);
+	if ( d > 0 ) {
+		y = y + 1;
+		d = d - dx;
+	}
+	else {
+		y = y + 1;
+		x = x + 1;
+		d = d + dy - dx;
+	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	
+			}
+		}
+	}
+
+	//negative slope: Octants 7, 8 (3 and 4)
+	else { 
+
+		//slope > -1: Octant 8 (4)
+		if ( dx > abs(dy) ) {
+
+			d = dy + ( dx / 2 );
+	
+			while ( x <= x1 ) {
+
+	plot(s, c, x, y, z, zbuf);
+	if ( d > 0 ) {
+		x = x + 1;
+		d = d + dy;
+	}
+	else {
+		x = x + 1;
+		y = y - 1;
+		d = d + dy + dx;
+	}
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	
+	//printf("3%f %f\n",z,z1);
+			}
+		}
+
+		//slope < -1: Octant 7 (3)
+		else {
+
+			d =  (dy / 2) + dx;
+
+			while ( y >= y1 ) {
+	
+	plot(s, c, x, y, z, zbuf);
+	if ( d < 0 ) {
+		y = y - 1;
+		d = d + dx;
+	}
+	else {
+		y = y - 1;
+		x = x + 1;
+		d = d + dy + dx;
+	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	
+			}
+		}
+	}
+}
+void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf, double* nL, double* nR, struct light ** point) {
 //void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
 	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
 	int x, y, d, dx, dy;
