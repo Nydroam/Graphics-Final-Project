@@ -23,18 +23,15 @@ push
 scale 1 1 1.1
 ambient 0 255 0
 constants three 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
-#head
 sphere 0 100 20 60
 ambient 255 255 255
 constants four 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
-#nose
 sphere 0 100 80 50
 pop
 push
 scale 1 1.8 1
 ambient 0 255 0
 constants five 0.4 0.4 0.4 0.3 0.3 0.3 0.8 0.8 0.8
-#eyes
 sphere -20 90 100 20
 sphere 20 90 100 20
 pop
@@ -102,7 +99,6 @@ torus 0 -20 0 5 40
 pop
 pop
 
-#shell
 push
 move -250 -250 0
 move 500 500 -800 hit
