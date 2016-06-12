@@ -69,7 +69,7 @@ triangles
 04/16/13 13:13:27
 jdyrlandweaver
 ====================*/
-void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light **point) {
+void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* zbuf, struct constants *rcolor, color ambient, struct light **point, int shading) {
   // printf("DRAWING\n");
   int i,j,k,x,y;  
 	double xB, yB, xM, yM, xT, yT, d0, d1, d2;
@@ -81,6 +81,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double xL,xR;
 	double zB, zM, zT;
 	double zL,zR;
+	//color c;
 	color Ia, Id, Is;
 	color cB, cM, cT;
 	color cL, cR;
@@ -93,6 +94,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	//SETTING VERTEX NORMALS================================================================================
 	struct matrix* vertices = new_matrix(4,1000);
 	struct matrix* v_normals = new_matrix(4,1000);
+	if(shading>0){
 	//struct matrix* to_add = new_matrix(4,1000);
 	// printf("HERE\n");
 	//printf("%d\n",polygons->cols);
@@ -192,6 +194,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	//for efficiency, stores I values so that we don't have to calculate again
 	//struct color *i_vals = (struct color *)malloc(v_normals->lastcol*sizeof(struct color));
 	//SETTING VERTEX NORMALS END========================================================================*/
+	}
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {
 		//get the surface normal
 		ax = polygons->m[0][i+1] - polygons->m[0][i];
@@ -267,6 +270,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					zM = polygons->m[2][i+1];
 				}
 			}
+			if(shading == 1){
 			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			// printf("here\n");
@@ -446,9 +450,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//printf("here3\n");
 			//3 outlines
 			//printf("cT after: %f, %f, %f\n",cB.red, cB.green, cB.blue);
-			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
-			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
-			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
+			draw_line1( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
+			draw_line1( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
+			draw_line1( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
 			//fill in
 			xR = xB;
 			zR = zB;
@@ -525,48 +529,56 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//printf("3%f %f\n",xR,xM);
 				 }
 			 }
-			 draw_line(xL,y,zL,xR,y,zR,s,zbuf,cL,cR);
+			 draw_line1(xL,y,zL,xR,y,zR,s,zbuf,cL,cR);
 			 y+=1;
 		 	}
 			//GOURAUD ATTEMPT END =====================================================================*/
-			/*//SHADING HERE-------------------------------------------------
+			}
+			
+			else if(shading == 0){
+			  c.red = 0;
+			  c.blue = 0;
+			  c.green = 0;
+			//SHADING HERE-------------------------------------------------
+			  for(k = 0; point[k]; k++){
 			//ambient
 			Ia.red = ambient.red * rcolor->r[0];
 			Ia.green = ambient.green * rcolor->r[1];
 			Ia.blue = ambient.blue * rcolor->r[2];
 
 			//light vector
-			light_v[0] = (xB + xM + xT) / 3.0 - point->l[0];
-			light_v[1] = (yB + yM + yT) / 3.0 - point->l[1];
-			light_v[2] = (zB + zM + zT) / 3.0 - point->l[2];
+			light_v[0] = (xB + xM + xT) / 3.0 - point[k]->l[0];
+			light_v[1] = (yB + yM + yT) / 3.0 - point[k]->l[1];
+			light_v[2] = (zB + zM + zT) / 3.0 - point[k]->l[2];
 
 			//normalize
 			normalize(light_v);
 			normalize(normal);
 
 			//diffuse
-			Id.red = point->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
-			Id.green = point->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
-			Id.blue = point->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
+			Id.red = point[k]->c[0] * rcolor->g[0] * calculate_dot(light_v, normal) * -1;
+			Id.green = point[k]->c[1] * rcolor->g[1] * calculate_dot(light_v, normal) * -1;
+			Id.blue = point[k]->c[2] * rcolor->g[2] * calculate_dot(light_v, normal) * -1;
 
 			//specular
 			reflect[0] = 2 * calculate_dot(light_v, normal) * normal[0] - light_v[0];
 			reflect[1] = 2 * calculate_dot(light_v, normal) * normal[1] - light_v[1];
 			reflect[2] = 2 * calculate_dot(light_v, normal) * normal[2] - light_v[2];
-			Is.red = point->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-			Is.green = point->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
-			Is.blue = point->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
+			Is.red = point[k]->c[0] * rcolor->b[0] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+			Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
+			Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
 			//add all I
-			c.red = Ia.red + Id.red + Is.red;
+			c.red += Ia.red + Id.red + Is.red;
 			c.red = c.red>255?255:c.red;
 			c.red = c.red<0?0:c.red;
-			c.blue = Ia.blue + Id.blue + Is.blue;
+			c.blue += Ia.blue + Id.blue + Is.blue;
 			c.blue = c.blue>255?255:c.blue;
 			c.blue = c.blue<0?0:c.blue;      
-			c.green = Ia.green + Id.green + Is.green;
+			c.green += Ia.green + Id.green + Is.green;
 			c.green = c.green>255?255:c.green;
 			c.green = c.green<0?0:c.green;
+			  }
 			//SHADING END---------------------------------------------------
 			//3 outlines
 			draw_line( polygons->m[0][i],
@@ -637,8 +649,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			 y+=1;
 		 }
 	   
-		free(normal);*/
-	 }
+		}
+		}
 		// printf("here3\n");
  }
 }
@@ -1153,8 +1165,161 @@ to the screen
 }*/
 
 
-//void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
-void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
+void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
+//void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
+	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
+	int x, y, d, dx, dy;
+	double z, dz, dist;
+	//color c;
+	x = x0;
+	y = y0;
+	z = z0;
+
+	// c = c0;
+	//c.red = c0.red;
+	//c.green = c0.green;
+	//c.blue = c0.blue;
+	//swap points so we're always drawing left to right
+	if ( x0 > x1 ) {
+		//printf("flippy\n");
+		x = x1;
+		y = y1;
+		z = z1;
+		// c = c1;
+		//c.red = c1.red;
+		//c.green = c1.green;
+		//c.blue = c1.blue;
+		x1 = x0;
+		y1 = y0;
+		z1 = z0;
+		//c1 = c0;
+		x0 = x;
+		y0 = y;
+		z0 = z;
+		// c0 = c;
+		//c0.red = c.red;
+		//c0.green = c.green;
+		//c0.blue = c.blue;
+	}
+
+	//need to know dx and dy for this version
+	dx = (x1 - x) * 2;
+	dy = (y1 - y) * 2;
+	//printf("%d, %d, %d, %d, %d, %d, %d, %d\n",x,x0, x1,y, y0, y1, dx, dy);
+	//printf("draw_line\n");
+	//positive slope: Octants 1, 2 (5 and 6)
+	if ( dy == 0 && dx == 0 ){
+		//plot(s,c,x,y,z,zbuf);
+	}
+	else if ( dy > 0 ) {
+
+		//slope < 1: Octant 1 (5)
+		if ( dx > dy ) {
+			d = dy - ( dx / 2 );
+	
+			while ( x <= x1 ) {
+	plot(s, c, x, y, z, zbuf);
+	if ( d < 0 ) {
+		x = x + 1;
+		d = d + dy;
+	}
+	else {
+		x = x + 1;
+		y = y + 1;
+		d = d + dy - dx;
+	}
+	
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	
+			}
+		}
+
+		//slope > 1: Octant 2 (6)
+		else {
+			d = ( dy / 2 ) - dx;
+			while ( y <= y1 ) {
+	plot(s, c, x, y, z, zbuf);
+	if ( d > 0 ) {
+		y = y + 1;
+		d = d - dx;
+	}
+	else {
+		y = y + 1;
+		x = x + 1;
+		d = d + dy - dx;
+	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	
+			}
+		}
+	}
+
+	//negative slope: Octants 7, 8 (3 and 4)
+	else { 
+
+		//slope > -1: Octant 8 (4)
+		if ( dx > abs(dy) ) {
+
+			d = dy + ( dx / 2 );
+	
+			while ( x <= x1 ) {
+
+	plot(s, c, x, y, z, zbuf);
+	if ( d > 0 ) {
+		x = x + 1;
+		d = d + dy;
+	}
+	else {
+		x = x + 1;
+		y = y - 1;
+		d = d + dy + dx;
+	}
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+	
+	//printf("3%f %f\n",z,z1);
+			}
+		}
+
+		//slope < -1: Octant 7 (3)
+		else {
+
+			d =  (dy / 2) + dx;
+
+			while ( y >= y1 ) {
+	
+	plot(s, c, x, y, z, zbuf);
+	if ( d < 0 ) {
+		y = y - 1;
+		d = d + dx;
+	}
+	else {
+		y = y - 1;
+		x = x + 1;
+		d = d + dy + dx;
+	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	
+	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+	
+			}
+		}
+	}
+}
+void draw_line1(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
 	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
 	int x, y, d, dx, dy;
 	double z, dz, dist;

@@ -271,7 +271,7 @@
 					step);
 	//apply the current top origin
   					matrix_mult( s->data[ s->top ], tmp );
-  					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point );
+  					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, FLAT );
   					tmp->lastcol = 0;
 					// printf("DONE\n");
   				break;
@@ -283,7 +283,7 @@
 		   			op[i].op.torus.r1,
 		   			step);
 					matrix_mult( s->data[ s->top ], tmp );
-					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point );
+					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, FLAT );
 					tmp->lastcol = 0;
 				break;
 				case BOX:
@@ -294,7 +294,7 @@
 					op[i].op.box.d1[1],
 					op[i].op.box.d1[2]);
 					matrix_mult( s->data[ s->top ], tmp );
-					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point );
+					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, FLAT );
 					tmp->lastcol = 0;
 				break;
 				/*case LINE:
