@@ -114,7 +114,7 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
 
       //normalize
       normalize(light_v);
-      normalize(normal);
+      normalize(n);
 
       //diffuse
       Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,normal)*-1;
