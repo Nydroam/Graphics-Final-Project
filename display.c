@@ -133,15 +133,16 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       c.red += Ia.red + Id.red + Is.red;
       c.blue += Ia.blue + Id.blue + Is.blue;
       c.green += Ia.green + Id.green + Is.green;
-      c.red = c.red>255?255:c.red;
+      
+      //printf("lighting\n");
+    }
+c.red = c.red>255?255:c.red;
       c.red = c.red<0?0:c.red;
       c.green = c.green>255?255:c.green;
       c.green = c.green<0?0:c.green;
       c.blue = c.blue>255?255:c.blue;
       c.blue = c.blue<0?0:c.blue;
 
-      //printf("lighting\n");
-    }
     s[x][newy]=c;
     zbuf->m[x][newy]=z;
   }
