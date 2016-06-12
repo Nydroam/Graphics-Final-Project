@@ -1,4 +1,6 @@
-Files
+Raymond Wu (Period 8) and Haoran Xiao (Period 4)
+
+Graphics Final Project
 -----
 README 		- this file.
 
