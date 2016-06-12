@@ -270,9 +270,12 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			// printf("here\n");
-			printf("bleh\n");
+			//printf("bleh\n");
+			struct matrix *t_vals = new_matrix(4,10);
+			struct matrix *m_vals = new_matrix(4,10);
+			struct matrix *b_vals = new_matrix(4,10);
 			for( k = 0; point[k]; k++){
-			  printf("k\n");
+			  //printf("%f %f %f\n",cT.red,cT.green,cT.blue);
 			for( j = 0; j < vertices->lastcol; j++){
 
 				if(nearly_equal(vertices->m[0][j], xT)&&nearly_equal(vertices->m[1][j],yT)&&nearly_equal(vertices->m[2][j],zT)){
@@ -318,6 +321,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cT.green = cT.green<0?0:cT.green;
 					cT.blue = cT.blue>255?255:cT.blue;
 					cT.blue = cT.blue<0?0:cT.blue;
+					add_point(t_vals,cT.red,cT.green,cT.blue);
 					// printf("cT before: %f, %f, %f",cT.red, cT.green, cT.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xM)&&nearly_equal(vertices->m[1][j],yM)&&nearly_equal(vertices->m[2][j],zM)){
@@ -352,6 +356,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cM.green = cM.green<0?0:cM.green;
 					cM.blue = cM.blue>255?255:cM.blue;
 					cM.blue = cM.blue<0?0:cM.blue;
+					add_point(m_vals,cM.red,cM.green,cM.blue);
 				}
 				if(nearly_equal(vertices->m[0][j], xB)&&nearly_equal(vertices->m[1][j],yB)&&nearly_equal(vertices->m[2][j],zB)){
 					Ia.red = ambient.red * rcolor->r[0];
@@ -385,14 +390,39 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					cB.green = cB.green<0?0:cB.green;
 					cB.blue = cB.blue>255?255:cB.blue;
 					cB.blue = cB.blue<0?0:cB.blue;
+					add_point(b_vals,cB.red,cB.green,cB.blue);
 				}
 				
 			}}
+			cT.red = 0;
+			cT.blue = 0;
+			cT.green = 0;
+			cM.red = 0;
+			cM.blue = 0;
+			cM.green = 0;
+			cB.red = 0;
+			cB.blue = 0;
+			cB.green = 0;
+			for(k = 0; k < t_vals->lastcol; k++){
+			  cT.red+=t_vals->m[0][k];
+			  cT.green +=t_vals->m[1][k];
+			  cT.blue+=t_vals->m[2][k];
+			}
+			for(k = 0; k < m_vals->lastcol; k++){
+			  cM.red+=m_vals->m[0][k];
+			  cM.green +=m_vals->m[1][k];
+			  cM.blue+=m_vals->m[2][k];
+			}
+			for(k = 0; k < t_vals->lastcol; k++){
+			  cB.red+=b_vals->m[0][k];
+			  cB.green +=b_vals->m[1][k];
+			  cB.blue+=b_vals->m[2][k];
+			}
 			
 			// printf("here2\n");
 			//printf("here3\n");
 			//3 outlines
-			// printf("cT after: %f, %f, %f",cT.red, cT.green, cT.blue);
+			 printf("cT after: %f, %f, %f\n",cT.red, cT.green, cT.blue);
 			draw_line( xT, yT, zT, xM, yM, zM, s, zbuf, cT, cM);
 			draw_line( xM, yM, zM, xB, yB, zB, s, zbuf, cM, cB);
 			draw_line( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT);
