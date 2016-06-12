@@ -216,15 +216,16 @@
   	struct constants *rcolor;
   	rcolor = (struct constants *)malloc(sizeof(struct constants));
   	color ambient;
-  	struct light **point;
-  	point = (struct light **)malloc(10*sizeof(struct light*));
-	int l_index = 0;
+      	//int l_index = 0;
   	first_pass();
 
   	if (num_frames > 1)
   		knobs = second_pass();
 
   	for (f=0;f<num_frames;f++) {
+	  struct light **point;
+	  point = (struct light **)malloc(10*sizeof(struct light*));
+	  int l_index = 0;
   		printf("Frame %d\n",f);
   		s = new_stack();
   		tmp = new_matrix(4, 1000);
