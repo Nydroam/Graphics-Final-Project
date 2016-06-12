@@ -84,6 +84,65 @@ void plot( screen s, color c, int x, int y, int z, struct matrix *zbuf) {
   }
   // printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
+void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, struct constants *rcolor, color ambient, struct light ** point) {
+  int newy = YRES - 1 - y;
+  int i,j;
+  color Ia,Id,Is;
+  double *light_v = (double *)malloc(3*sizeof(double));
+  double * view = (double *)malloc(3*sizeof(double));
+  double * reflect = (double *)malloc(3*sizeof(double));
+  view[0]=0;
+  view[1]=0;
+  view[2]=-1;
+  color c;
+  double * normal = n;
+  c.red = 0;
+  c.green = 0;
+  c.blue = 0;
+  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES && z > (int)zbuf->m[x][newy]){
+    for(i = 0; point[i];i++){
+      //ambient
+      Ia.red = ambient.red * rcolor->r[0];
+      Ia.green = ambient.green *rcolor->r[1];
+      Ia.blue = ambient.blue *rcolor->r[2];
+
+      //light vector
+      light_v[0] = x - point[i]->l[0];
+      light_v[1] = y - point[i]->l[1];
+      light_v[2] = z - point[i]->l[2];
+
+      //normalize
+      normalize(light_v);
+      normalize(normal);
+
+      //diffuse
+      Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,normal)*-1;
+      Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,normal)*-1;
+      Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,normal)*-1;
+
+      //specular
+      reflect[0] = 2 * calculate_dot(light_v, normal)*normal[0] - light_v[0];
+      reflect[1] = 2 * calculate_dot(light_v, normal)*normal[1] - light_v[1];
+      reflect[2] = 2 * calculate_dot(light_v, normal)*normal[2] - light_v[2];
+      Is.red = point[i]->c[0] * rcolor->b[0] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
+      Is.green = point[i]->c[1] * rcolor->b[1] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
+      Is.blue = point[i]->c[2] * rcolor->b[2] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
+
+      c.red += Ia.red + Id.red + Is.red;
+      c.blue += Ia.blue + Id.blue + Is.blue;
+      c.green += Ia.green + Id.green + Is.green;
+      c.red = c.red>255?255:c.red;
+      c.red = c.red<0?0:c.red;
+      c.green = c.green>255?255:c.green;
+      c.green = c.green<0?0:c.green;
+      c.blue = c.blue>255?255:c.blue;
+      c.blue = c.blue<0?0:c.blue;
+    }
+    s[x][newy]=c;
+    zbuf->m[x][newy]=z;
+  }
+  // printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
+}
 
 /*======== void clear_screen() ==========
 Inputs:   screen s  

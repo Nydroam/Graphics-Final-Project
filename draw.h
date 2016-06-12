@@ -14,7 +14,7 @@
 
 void draw_line1(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1);
 void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf);
-void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, double *nL, double *nR);
+void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, double *nL, double *nR, struct constants * rcolor, color ambient, struct light ** point);
 void add_point( struct matrix * points, 
 		 double x, double y, double z);
 void add_edge( struct matrix * points, 

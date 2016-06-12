@@ -81,7 +81,11 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	double xL,xR;
 	double zB, zM, zT;
 	double zL,zR;
-	double* nB, nM, nT, nL, nR;
+	double* nB;
+	double* nM;
+	double* nT;
+	double* nL;
+	double* nR;
 	nB = (double *)malloc(3*sizeof(double));
 	nM = (double *)malloc(3*sizeof(double));
 	nT = (double *)malloc(3*sizeof(double));
@@ -683,9 +687,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			    }
 			  }
 			  //PHONG ATTEMPT DSHFJDKFHJDKSFHKJSDHFDKSJHDSJKFHDSKJF
-			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, point);
-			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, point);
-			  draw_line3( xB, yB, zB, xT, yT, zT, s, zbuf, cB, cT, point);
+			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
+			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
+			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
 			  xR = xB;
 			  zR = zB;
 			  nL[0] = nB[0];
@@ -762,7 +766,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				nR[2] = nB[2] + d1*(y-yB);
 			      }
 			    }
-			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,point);
+			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,rcolor,ambient,point);
 			  }  
 			    //PHONG END
 			  
@@ -771,7 +775,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 	}
 	// printf("here3\n");
 }
-}
+
 
 
 /*======== void add_sphere() ==========
@@ -1282,42 +1286,39 @@ to the screen
 	} 	       
 }*/
 
-void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, nor) {
+void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, double * n0, double * n1, struct constants* rcolor, color ambient, struct light ** point) {
 //void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
 	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
 	int x, y, d, dx, dy;
 	double z, dz, dist;
 	//color c;
+	double *n;
+	n = (double *)malloc(3*sizeof(double));
+	
 	x = x0;
 	y = y0;
 	z = z0;
 
-	// c = c0;
-	//c.red = c0.red;
-	//c.green = c0.green;
-	//c.blue = c0.blue;
+	n[0]=n0[0];
+	n[1]=n0[1];
+	n[2]=n0[2];
+	
 	//swap points so we're always drawing left to right
 	if ( x0 > x1 ) {
 		//printf("flippy\n");
 		x = x1;
 		y = y1;
 		z = z1;
-		// c = c1;
-		//c.red = c1.red;
-		//c.green = c1.green;
-		//c.blue = c1.blue;
+		n = n1;
 		x1 = x0;
 		y1 = y0;
 		z1 = z0;
-		//c1 = c0;
+		n1 = n0;
 		x0 = x;
 		y0 = y;
 		z0 = z;
-		// c0 = c;
-		//c0.red = c.red;
-		//c0.green = c.green;
-		//c0.blue = c.blue;
-	}
+		n0 = n;
+      	}
 
 	//need to know dx and dy for this version
 	dx = (x1 - x) * 2;
@@ -1335,22 +1336,27 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 			d = dy - ( dx / 2 );
 	
 			while ( x <= x1 ) {
-	plot(s, c, x, y, z, zbuf);
-	if ( d < 0 ) {
-		x = x + 1;
-		d = d + dy;
-	}
-	else {
-		x = x + 1;
-		y = y + 1;
-		d = d + dy - dx;
-	}
+			  plot1(s,  x, y, z, zbuf, n, rcolor, ambient, point);
+			  if ( d < 0 ) {
+			    x = x + 1;
+			    d = d + dy;
+			  }
+			  else {
+			    x = x + 1;
+			    y = y + 1;
+			    d = d + dy - dx;
+			  }
 	
-	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+			  z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
 	
-	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
-	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
-	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+			  //c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
+			  //c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
+			  //c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
+
+			  n[0] = n0[0] + ((double)x-x0)/(x1-x0)*(n1[0]-n0[0]);
+			  n[1] = n0[1] + ((double)x-x0)/(x1-x0)*(n1[1]-n0[1]);
+			  n[2] = n0[2] + ((double)x-x0)/(x1-x0)*(n1[2]-n0[2]);
+			  
 	
 			}
 		}
@@ -1359,22 +1365,25 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		else {
 			d = ( dy / 2 ) - dx;
 			while ( y <= y1 ) {
-	plot(s, c, x, y, z, zbuf);
-	if ( d > 0 ) {
-		y = y + 1;
-		d = d - dx;
-	}
-	else {
-		y = y + 1;
-		x = x + 1;
-		d = d + dy - dx;
-	}
-	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	
-	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
-	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
-	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
-	
+			  plot1(s,  x, y, z, zbuf, n, rcolor, ambient,point);
+			  if ( d > 0 ) {
+			    y = y + 1;
+			    d = d - dx;
+			  }
+			  else {
+			    y = y + 1;
+			    x = x + 1;
+			    d = d + dy - dx;
+			  }
+			  z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+			  
+			  n[0] = n0[0] + ((double)y-y0)/(y1-y0)*(n1[0]-n0[0]);
+			  n[1] = n0[1] + ((double)y-y0)/(y1-y0)*(n1[1]-n0[1]);
+			  n[2] = n0[2] + ((double)y-y0)/(y1-y0)*(n1[2]-n0[2]);
+			  //c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
+			  //c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
+			  //c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
+			  
 			}
 		}
 	}
@@ -1389,7 +1398,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 	
 			while ( x <= x1 ) {
 
-	plot(s, c, x, y, z, zbuf);
+			  plot1(s,  x, y, z, zbuf, n, rcolor, ambient,point);
 	if ( d > 0 ) {
 		x = x + 1;
 		d = d + dy;
@@ -1404,7 +1413,9 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 	//c.red = c0.red + ((double)x-x0)/(x1-x0)*(c1.red-c0.red);
 	//c.green = c0.green + ((double)x-x0)/(x1-x0)*(c1.green-c0.green);
 	//c.blue = c0.blue + ((double)x-x0)/(x1-x0)*(c1.blue-c0.blue);
-	
+	n[0] = n0[0] + ((double)x-x0)/(x1-x0)*(n1[0]-n0[0]);
+	n[1] = n0[1] + ((double)x-x0)/(x1-x0)*(n1[1]-n0[1]);
+	n[2] = n0[2] + ((double)x-x0)/(x1-x0)*(n1[2]-n0[2]);
 	//printf("3%f %f\n",z,z1);
 			}
 		}
@@ -1416,7 +1427,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 
 			while ( y >= y1 ) {
 	
-	plot(s, c, x, y, z, zbuf);
+			  plot1(s,  x, y, z, zbuf, n, rcolor, ambient,point);
 	if ( d < 0 ) {
 		y = y - 1;
 		d = d + dx;
@@ -1427,7 +1438,9 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		d = d + dy + dx;
 	}
 	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
-	
+	n[0] = n0[0] + ((double)y-y0)/(y1-y0)*(n1[0]-n0[0]);
+	n[1] = n0[1] + ((double)y-y0)/(y1-y0)*(n1[1]-n0[1]);
+	n[2] = n0[2] + ((double)y-y0)/(y1-y0)*(n1[2]-n0[2]);
 	//c.red = c0.red + ((double)y-y0)/(y1-y0)*(c1.red-c0.red);
 	//c.green = c0.green + ((double)y-y0)/(y1-y0)*(c1.green-c0.green);
 	//c.blue = c0.blue + ((double)y-y0)/(y1-y0)*(c1.blue-c0.blue);
@@ -1436,7 +1449,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		}
 	}
 }
-void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf, double* nL, double* nR, struct light ** point) {
+void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
 //void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
 	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
 	int x, y, d, dx, dy;
