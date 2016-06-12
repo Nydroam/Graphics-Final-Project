@@ -270,7 +270,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			//GOURAUD SHADING HERE=====================================================================
 			//calculating I for each vertex of this polygon, sets up cT, cM, cB
 			// printf("here\n");
+			printf("bleh\n");
 			for( k = 0; point[k]; k++){
+			  printf("k\n");
 			for( j = 0; j < vertices->lastcol; j++){
 
 				if(nearly_equal(vertices->m[0][j], xT)&&nearly_equal(vertices->m[1][j],yT)&&nearly_equal(vertices->m[2][j],zT)){
@@ -307,9 +309,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 
 					// printf("cT before before: %f, %f, %f\n",cT.red, cT.green, cT.blue);
 					// printf("cT Ia: %f, Id: %f, Is: %f\n", Ia.red, Id.red, Is.red);
-					cT.red += Ia.red + Id.red + Is.red;
-      					cT.blue += Ia.blue + Id.blue + Is.blue;
-					cT.green += Ia.green + Id.green + Is.green;
+					cT.red = Ia.red + Id.red + Is.red;
+      					cT.blue = Ia.blue + Id.blue + Is.blue;
+					cT.green = Ia.green + Id.green + Is.green;
 					cT.red = cT.red>255?255:cT.red;
 					cT.red = cT.red<0?0:cT.red;
 					cT.green = cT.green>255?255:cT.green;
@@ -341,9 +343,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
 					Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
-					cM.red += Ia.red + Id.red + Is.red;
-					cM.blue += Ia.blue + Id.blue + Is.blue;					
-					cM.green += Ia.green + Id.green + Is.green;
+					cM.red = Ia.red + Id.red + Is.red;
+					cM.blue = Ia.blue + Id.blue + Is.blue;					
+					cM.green = Ia.green + Id.green + Is.green;
 					cM.red = cM.red>255?255:cM.red;
 					cM.red = cM.red<0?0:cM.red;
 					cM.green = cM.green>255?255:cM.green;
@@ -374,9 +376,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 					Is.green = point[k]->c[1] * rcolor->b[1] * calculate_dot(reflect, view) * calculate_dot(reflect, view) * calculate_dot(reflect, view);
 					Is.blue = point[k]->c[2] * rcolor->b[2] * calculate_dot(reflect, view) * calculate_dot(reflect, view)  * calculate_dot(reflect, view);
 
-					cB.red += Ia.red + Id.red + Is.red;
-      					cB.blue += Ia.blue + Id.blue + Is.blue;
-					cB.green += Ia.green + Id.green + Is.green;
+					cB.red = Ia.red + Id.red + Is.red;
+      					cB.blue = Ia.blue + Id.blue + Is.blue;
+					cB.green = Ia.green + Id.green + Is.green;
 					cB.red = cB.red>255?255:cB.red;
 					cB.red = cB.red<0?0:cB.red;
 					cB.green = cB.green>255?255:cB.green;
