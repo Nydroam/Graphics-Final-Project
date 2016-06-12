@@ -690,7 +690,9 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			  //normalize(nT);
 			  //normalize(nB);
 			  //normalize(nM);
-			  //printf("%f %f %f\n",nT[0],nT[1],nT[2]);
+			  printf("%f %f %f\n",nT[0],nT[1],nT[2]);
+			  printf("%f %f %f\n",nM[0],nM[1],nM[2]);
+			  printf("%f %f %f\n",nB[0],nB[1],nB[2]);
 			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
 			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
 			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
