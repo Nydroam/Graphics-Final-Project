@@ -737,11 +737,11 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				zR = zM + d2*(y-yM);
 
 				d2 = (nT[0]-nM[0])/(yT-yM);
-				nL[0] = nM[0] + d2*(y-yM);
+				nR[0] = nM[0] + d2*(y-yM);
 				d2 = (nT[1]-nM[1])/(yT-yM);
-				nL[1] = nM[1] + d2*(y-yM);
+				nR[1] = nM[1] + d2*(y-yM);
 				d2 = (nT[2]-nM[2])/(yT-yM);
-				nL[2] = nM[2] + d2*(y-yM);
+				nR[2] = nM[2] + d2*(y-yM);
 			      }
 			    }
 			    else{
