@@ -4,7 +4,7 @@ push
 move 0 250 0
 move 500 0 0 spinny
 rotate x 20
-rotate y 30
+rotate y 360 spinny
 constants colors 0.1 0.1 0.1 0.3 0.3 0.3 1 1 1
 ambient 100 100 100
 light mylight 250 400 300 100 200 255
