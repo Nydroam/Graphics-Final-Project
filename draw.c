@@ -671,6 +671,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nT[0] = v_normals->m[0][j];
 			      nT[1] = v_normals->m[1][j];
 			      nT[2] = v_normals->m[2][j];
+			      printf("nT - %d\n",j);
 			    }
 			    if(nearly_equal(vertices->m[0][j],xM)
 			       &&nearly_equal(vertices->m[1][j],yM)
@@ -678,6 +679,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nM[0] = v_normals->m[0][j];
 			      nM[1] = v_normals->m[1][j];
 			      nM[2] = v_normals->m[2][j];
+			      printf("nM - %d\n",j);
 			    }
 			    if(nearly_equal(vertices->m[0][j],xB)
 			       &&nearly_equal(vertices->m[1][j],yB)
@@ -685,14 +687,15 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nB[0] = v_normals->m[0][j];
 			      nB[1] = v_normals->m[1][j];
 			      nB[2] = v_normals->m[2][j];
+			     printf("nB - %d\n",j);
 			    }
 			  }
 			  //normalize(nT);
 			  //normalize(nB);
 			  //normalize(nM);
-			  printf("%f %f %f\n",nT[0],nT[1],nT[2]);
-			  printf("%f %f %f\n",nM[0],nM[1],nM[2]);
-			  printf("%f %f %f\n",nB[0],nB[1],nB[2]);
+			  printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
+			  printf("nM: %f %f %f\n",nM[0],nM[1],nM[2]);
+			  printf("nB: %f %f %f\n\n",nB[0],nB[1],nB[2]);
 			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
 			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
 			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
@@ -720,6 +723,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      d0 = (zT-zB)/(yT-yB);
 			      zL = zB + d0*(y-yB);
 
+			      printf("nL: %f %f %f\n",nL[0],nL[1],nL[2]);
+			      printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
 			      d0 = (nT[0]-nB[0])/(yT-yB);
 			      nL[0] = nB[0] + d0*(y-yB);
 			      d0 = (nT[1]-nB[1])/(yT-yB);
@@ -772,7 +777,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				nR[2] = nB[2] + d1*(y-yB);
 			      }
 			    }
-			    //printf("%f %f %f\n",nL[0], nL[1], nL[2]);
+			    //printf("nL:%f %f %f\n",nL[0], nL[1], nL[2]);
 			    draw_line2(xL,y,zL,xR,y,zR,s,zbuf,nL,nR,rcolor,ambient,point);
 			    y+=1;
 			    }
@@ -1294,14 +1299,19 @@ to the screen
 	} 	       
 }*/
 
-void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, double * n0, double * n1, struct constants* rcolor, color ambient, struct light ** point) {
+void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, double * nL, double * nR, struct constants* rcolor, color ambient, struct light ** point) {
 //void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
 	// printf("drawline c0: %f %f %f, c1: %f %f %f\n", c0.red, c0.green, c0.blue, c1.red, c1.green, c1.blue);
 	int x, y, d, dx, dy;
 	double z, dz, dist;
 	//color c;
 	double *n;
+	double *n0;
+	double *n1;
+	
 	n = (double *)malloc(3*sizeof(double));
+	n0 = (double *)malloc(3*sizeof(double));
+	n1 = (double *)malloc(3*sizeof(double));
 	
 	x = x0;
 	y = y0;
@@ -1317,6 +1327,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		x = x1;
 		y = y1;
 		z = z1;
+		
 		n[0] = n1[0];
 		n[1] = n1[0];
 		n[2] = n1[2];
