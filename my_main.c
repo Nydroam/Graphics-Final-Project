@@ -227,7 +227,7 @@
 	  point = (struct light **)malloc(10*sizeof(struct light*));
 	  int l_index = 0;
 	  int shading;
-  		printf("Frame %d\n",f);
+  		printf("Frame %d - Thank You Mr. DW for Everything! (Spamming so you can't ignore this!!!)\n",f);
   		s = new_stack();
   		tmp = new_matrix(4, 1000);
   		transform = new_matrix(4,4);
