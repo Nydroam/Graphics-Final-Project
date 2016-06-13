@@ -723,8 +723,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      d0 = (zT-zB)/(yT-yB);
 			      zL = zB + d0*(y-yB);
 
-			      printf("nL: %f %f %f\n",nL[0],nL[1],nL[2]);
-			      printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
+			      //printf("nL: %f %f %f\n",nL[0],nL[1],nL[2]);
+			      //printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
 			      d0 = (nT[0]-nB[0])/(yT-yB);
 			      nL[0] = nB[0] + d0*(y-yB);
 			      d0 = (nT[1]-nB[1])/(yT-yB);
@@ -747,6 +747,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				d2 = (zT-zM)/(yT-yM);
 				zR = zM + d2*(y-yM);
 
+				
+				//printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
 				d2 = (nT[0]-nM[0])/(yT-yM);
 				nR[0] = nM[0] + d2*(y-yM);
 				d2 = (nT[1]-nM[1])/(yT-yM);
@@ -764,6 +766,8 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 				nR[2] = nB[2];
 			      }
 			      else{
+				//printf("nR: %f %f %f\n",nR[0],nR[1],nR[2]);
+				//printf("nM: %f %f %f\n",nM[0],nM[1],nM[2]);
 				d1 = (xM-xB)/(yM-yB);
 				xR = xB + d1*(y-yB);
 				d1 = (zM-zB)/(yM-yB);
@@ -1317,6 +1321,14 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 	y = y0;
 	z = z0;
 
+	n0[0]=nL[0];
+	n0[1]=nL[1];
+	n0[2]=nL[2];
+
+	n1[0]=nR[0];
+	n1[1]=nR[1];
+	n1[2]=nR[2];
+	
 	n[0]=n0[0];
 	n[1]=n0[1];
 	n[2]=n0[2];
