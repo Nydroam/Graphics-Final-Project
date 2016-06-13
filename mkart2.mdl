@@ -33,6 +33,7 @@ box -100 30 125 200 60 315
 ambient 0 0 0
 box -80 120 105 160 110 20
 box -80 40 85 160 30 100
+shading GOURAUD
 //steering wheel
 push
 move 0 150 -160
@@ -45,11 +46,13 @@ rotate x 90
 torus 0 45 33 15 30
 pop
 //engine
+shading PHONG
 push
 move 0 100 240
 ambient 200 200 200
 box -65 0 0 130 100 115
 //exhausts
+shading GOURAUD
 push
 move 30 -30 50
 rotate x -90
@@ -216,6 +219,7 @@ pop
 // display
 
 //shell
+shading FLAT
 push
 move -250 -250 0
 move 500 500 -800 hit
