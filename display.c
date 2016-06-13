@@ -164,6 +164,10 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
     s[x][newy]=c;
     zbuf->m[x][newy]=z;
   }
+  free(light_v);
+  free(view);
+  free(reflect);
+  free(normal);
   //printf("plot color: %f, %f, %f\n", c.red, c.green, c.blue);
 }
 
