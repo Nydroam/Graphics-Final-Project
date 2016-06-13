@@ -94,6 +94,10 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
   double *light_v = (double *)malloc(3*sizeof(double));
   double * view = (double *)malloc(3*sizeof(double));
   double * reflect = (double *)malloc(3*sizeof(double));
+  double * normal = (double *)malloc(3*sizeof(double));
+  normal[0]=n[0];
+  normal[1]=n[1];
+  normal[2]=n[2];
   view[0]=0;
   view[1]=0;
   view[2]=-1;
@@ -117,19 +121,19 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
 
       //normalize
       normalize(light_v);
-      normalize(n);
+      normalize(normal);
       //printf("%f %f %f\n",n[0],n[1],n[2]);
       //diffuse
-      Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,n)*-1;
-      Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,n)*-1;
-      Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,n)*-1;
+      Id.red = point[i]->c[0] * rcolor->g[0]*calculate_dot(light_v,normal)*-1;
+      Id.green = point[i]->c[1] * rcolor->g[1]*calculate_dot(light_v,normal)*-1;
+      Id.blue = point[i]->c[2] * rcolor->g[2]*calculate_dot(light_v,normal)*-1;
       //printf("light_v: %f %f %f\n",light_v[0],light_v[1],light_v[2]);
       //printf("normal: %f %f %f\n",n[0],n[1],n[2]);
       
       //specular
-      reflect[0] = 2 * calculate_dot(light_v, n)*n[0] - light_v[0];
-      reflect[1] = 2 * calculate_dot(light_v, n)*n[1] - light_v[1];
-      reflect[2] = 2 * calculate_dot(light_v, n)*n[2] - light_v[2];
+      reflect[0] = 2 * calculate_dot(light_v, normal)*normal[0] - light_v[0];
+      reflect[1] = 2 * calculate_dot(light_v, normal)*normal[1] - light_v[1];
+      reflect[2] = 2 * calculate_dot(light_v, normal)*normal[2] - light_v[2];
       //printf("%f\n",calculate_dot(light_v, n));
       //printf("%f %f %f\n",n[0],n[1],n[2]);
       Is.red = point[i]->c[0] * rcolor->b[0] * calculate_dot(reflect,view) * calculate_dot(reflect,view) * calculate_dot(reflect,view);
