@@ -1,5 +1,6 @@
 frames 100
 basename mkart
+shading PHONG
 light mylight 400 450 120 255 255 51
 push
 move 250 150 0

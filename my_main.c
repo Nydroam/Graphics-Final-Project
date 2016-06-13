@@ -210,7 +210,7 @@
   	g.red = 0;
   	g.green = 0;
   	g.blue = 0;
-	int shading;
+	//int shading;
   	struct matrix *zbuffer;
 
   	struct constants *rcolor;
@@ -226,6 +226,7 @@
 	  struct light **point;
 	  point = (struct light **)malloc(10*sizeof(struct light*));
 	  int l_index = 0;
+	  int shading;
   		printf("Frame %d\n",f);
   		s = new_stack();
   		tmp = new_matrix(4, 1000);
@@ -379,7 +380,7 @@
 				break;
 				}
 			}
-			// printf("SAVING\n");
+			//printf("SAVING\n");
 			if(num_frames>1){
 			sprintf(frame_name, "./anim/%s%03d.png", name, f);
 			save_extension(t, frame_name);
@@ -387,8 +388,8 @@
 			}
 			
 			//free_stack( s );
-		//	free_matrix( tmp );
-	// free_matrix( transform );
+			//free_matrix( tmp );
+			//free_matrix( transform );
 		// printf("VERY END\n");
 	}
 }

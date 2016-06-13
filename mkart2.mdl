@@ -1,6 +1,6 @@
 frames 50
 basename mkart
-shading GOURAUD
+shading PHONG
 light mylight 400 450 120 255 204 153
 constants one 0.4 0.4 0.4 0.5 0.5 0.5 0.5 0.5 0.5
 push
