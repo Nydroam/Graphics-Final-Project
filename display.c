@@ -102,7 +102,7 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
   view[1]=0;
   view[2]=-1;
   color c;
-  printf("%f %f %f\n",n[0],n[1],n[2]);
+  //printf("%f %f %f\n",n[0],n[1],n[2]);
   c.red = 0;
   c.green = 0;
   c.blue = 0;
