@@ -671,7 +671,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nT[0] = v_normals->m[0][j];
 			      nT[1] = v_normals->m[1][j];
 			      nT[2] = v_normals->m[2][j];
-			      printf("nT - %d\n",j);
+			      //printf("nT - %d\n",j);
 			    }
 			    if(nearly_equal(vertices->m[0][j],xM)
 			       &&nearly_equal(vertices->m[1][j],yM)
@@ -679,7 +679,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nM[0] = v_normals->m[0][j];
 			      nM[1] = v_normals->m[1][j];
 			      nM[2] = v_normals->m[2][j];
-			      printf("nM - %d\n",j);
+			      //printf("nM - %d\n",j);
 			    }
 			    if(nearly_equal(vertices->m[0][j],xB)
 			       &&nearly_equal(vertices->m[1][j],yB)
@@ -687,15 +687,15 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			      nB[0] = v_normals->m[0][j];
 			      nB[1] = v_normals->m[1][j];
 			      nB[2] = v_normals->m[2][j];
-			     printf("nB - %d\n",j);
+			      //printf("nB - %d\n",j);
 			    }
 			  }
 			  //normalize(nT);
 			  //normalize(nB);
 			  //normalize(nM);
-			  printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
-			  printf("nM: %f %f %f\n",nM[0],nM[1],nM[2]);
-			  printf("nB: %f %f %f\n\n",nB[0],nB[1],nB[2]);
+			  //printf("nT: %f %f %f\n",nT[0],nT[1],nT[2]);
+			  //printf("nM: %f %f %f\n",nM[0],nM[1],nM[2]);
+			  //printf("nB: %f %f %f\n\n",nB[0],nB[1],nB[2]);
 			  draw_line2( xT, yT, zT, xM, yM, zM, s, zbuf, nT, nM, rcolor, ambient,point);
 			  draw_line2( xM, yM, zM, xB, yB, zB, s, zbuf, nM, nB, rcolor, ambient,point);
 			  draw_line2( xB, yB, zB, xT, yT, zT, s, zbuf, nB, nT, rcolor, ambient,point);
