@@ -1491,9 +1491,6 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 			}
 		}
 	}
-	free(n);
-	free(n0);
-	free(n1);
 }
 void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix* zbuf) {
 //void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, struct matrix* zbuf, color c0, color c1){
