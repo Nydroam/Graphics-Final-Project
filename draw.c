@@ -199,7 +199,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		   //printf("v_normals i+1: %f %f %f\n", v_normals->m[0][i+1],  v_normals->m[1][i+1],  v_normals->m[2][i+1]);
 		   //printf("v_normals i+2: %f %f %f\n", v_normals->m[0][i+2],  v_normals->m[1][i+2],  v_normals->m[2][i+2]);
 		}//printf("END\n");
-		free(normal);
+	       
 	}
 	//print_matrix(to_add[0]);
 	//printf("v_normal for vertex 1: %f %f %f\n",v_normals->m[0][1],v_normals->m[1][1],v_normals->m[2][1]);
@@ -790,7 +790,7 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 			    //PHONG END
 			
 		}
-		free(normal);
+	    
 
 	}
 }
