@@ -2,9 +2,9 @@
 //basename robot
 constants colors 0.4 0.4 0.4 0.5 0.5 0.5 0.6 0.6 0.6
 light mylight 400 400 400 100 200 255
-light otherlight 100 100 400 255 100 55
-light other2light 400 100 400 0 255 0
-light other3light 100 400 400 255 255 0
+//light otherlight 100 100 400 255 100 55
+//light other2light 400 100 400 0 255 0
+//light other3light 100 400 400 255 255 0
 ambient 50 50 255
 //body
 //rotate y 360 spinny
