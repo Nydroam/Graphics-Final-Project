@@ -143,12 +143,12 @@ void plot1( screen s, int x, int y, int z, struct matrix *zbuf, double * n, stru
       //printf("%f %f %f\n",c.red, c.green, c.blue);
       //printf("lighting\n");
       //printf("%d\n",i);
-      c.red = c.red>255?255:c.red;
+      /*c.red = c.red>255?255:c.red;
       c.red = c.red<0?0:c.red;
       c.green = c.green>255?255:c.green;
       c.green = c.green<0?0:c.green;
       c.blue = c.blue>255?255:c.blue;
-      c.blue = c.blue<0?0:c.blue;
+      c.blue = c.blue<0?0:c.blue;*/
     }
     c.red = c.red>255?255:c.red;
       c.red = c.red<0?0:c.red;
