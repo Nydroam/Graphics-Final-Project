@@ -248,11 +248,13 @@
   			for (i=0;i<lastop;i++) {
   				switch (op[i].opcode) {
 				case SHADING:
-				  if(strcmp(op[i].op.shading.p->name,"FLAT"))
+				  if(!strcmp(op[i].op.shading.p->name,"FLAT"))
 				    shading = FLAT;
-				  else if(strcmp(op[i].op.shading.p->name,"GOURAUD"))
+				  else if(!strcmp(op[i].op.shading.p->name,"GOURAUD")){
 				    shading = GOURAUD;
-				  else if(strcmp(op[i].op.shading.p->name,"PHONG"))
+				    //printf("growled\n");
+				  }
+				  else if(!strcmp(op[i].op.shading.p->name,"PHONG"))
 				    shading = PHONG;
 				  else
 				    shading = 0;
