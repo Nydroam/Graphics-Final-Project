@@ -1341,7 +1341,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		z = z1;
 		
 		n[0] = n1[0];
-		n[1] = n1[0];
+		n[1] = n1[1];
 		n[2] = n1[2];
 		x1 = x0;
 		y1 = y0;
@@ -1371,7 +1371,7 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 		//slope < 1: Octant 1 (5)
 		if ( dx > dy ) {
 			d = dy - ( dx / 2 );
-	
+			//printf("bip\n");
 			while ( x <= x1 ) {
 			  plot1(s,  x, y, z, zbuf, n, rcolor, ambient, point);
 			  if ( d < 0 ) {
@@ -1394,8 +1394,11 @@ void draw_line2(int x0, int y0, double z0, int x1, int y1, double z1, screen s, 
 			  n[1] = n0[1] + ((double)x-x0)/(x1-x0)*(n1[1]-n0[1]);
 			  n[2] = n0[2] + ((double)x-x0)/(x1-x0)*(n1[2]-n0[2]);
 			  
-	
+			  //printf("n %f %f %f\n",n[0],n[1],n[2]);
+			  //printf("nL %f %f %f\n",nL[0],nL[1],nL[2]);
+			  //printf("nR %f %f %f\n",nR[0],nR[1],nR[2]);
 			}
+			//printf("bop\n");
 		}
 
 		//slope > 1: Octant 2 (6)
