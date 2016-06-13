@@ -712,7 +712,7 @@ SAVE STRING
   op[lastop].op.save.p = add_symbol($2,SYM_FILE,0);
   lastop++;
 }|
-SHADING SHADING_TYPE
+SHADING STRING
 {
   lineno++;
   op[lastop].opcode = SHADING;

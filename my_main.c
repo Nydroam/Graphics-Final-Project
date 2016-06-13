@@ -210,7 +210,7 @@
   	g.red = 0;
   	g.green = 0;
   	g.blue = 0;
-
+	int shading;
   	struct matrix *zbuffer;
 
   	struct constants *rcolor;
@@ -247,6 +247,16 @@
   			}
   			for (i=0;i<lastop;i++) {
   				switch (op[i].opcode) {
+				case SHADING:
+				  if(strcmp(op[i].op.shading.p->name,"FLAT"))
+				    shading = FLAT;
+				  else if(strcmp(op[i].op.shading.p->name,"GOURAUD"))
+				    shading = GOURAUD;
+				  else if(strcmp(op[i].op.shading.p->name,"PHONG"))
+				    shading = PHONG;
+				  else
+				    shading = 0;
+				  break;
   				case CONSTANTS:
 				  // printf("CONSTANTS\n");
           rcolor = lookup_symbol(op[i].op.constants.p->name)->s.c;
@@ -271,7 +281,7 @@
 					step);
 	//apply the current top origin
   					matrix_mult( s->data[ s->top ], tmp );
-  					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, PHONG );
+  					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, shading );
   					tmp->lastcol = 0;
 					// printf("DONE\n");
   				break;
@@ -283,7 +293,7 @@
 		   			op[i].op.torus.r1,
 		   			step);
 					matrix_mult( s->data[ s->top ], tmp );
-					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, PHONG );
+					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, shading );
 					tmp->lastcol = 0;
 				break;
 				case BOX:
@@ -294,7 +304,7 @@
 					op[i].op.box.d1[1],
 					op[i].op.box.d1[2]);
 					matrix_mult( s->data[ s->top ], tmp );
-					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, PHONG );
+					draw_polygons( tmp, t, g, zbuffer, rcolor, ambient, point, shading );
 					tmp->lastcol = 0;
 				break;
 				/*case LINE:
@@ -304,7 +314,7 @@
 					op[i].op.line.p1[0],
 					op[i].op.line.p1[1],
 					op[i].op.line.p1[1]);
-					draw_lines( tmp, t, g, zbuffer, rcolor, ambient, point );
+					draw_lines( tmp, t, g, zbuffer, rcolor, ambient, shading );
 					tmp->lastcol = 0;
 				break;*/
 				case MOVE:
