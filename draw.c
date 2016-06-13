@@ -793,14 +793,6 @@ void draw_polygons( struct matrix * polygons, screen s, color c, struct matrix* 
 		free(normal);
 
 	}
-	free(nB);
-	free(nM);
-	free(nT);
-	free(nL);
-	free(nR);
-	free(view);
-	free(light_v);
-	free(reflect);
 }
        
 
