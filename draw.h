@@ -4,7 +4,7 @@
 #include "matrix.h"
 #include "symtab.h"
 
-#define MAX_STEPS 500
+#define MAX_STEPS 100
 #define LAMBIENT 0
 #define LDIFFUSE 1
 #define LSPECULAR 2
